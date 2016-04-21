@@ -14,12 +14,12 @@ public class Message {
     Collaborateur expediteur;
     Recepteur recipi;
     
-    String conteneu;
+    String contenue;
 
-    public Message(Collaborateur expediteur, Recepteur recipi, String conteneu) {
+    public Message(Collaborateur expediteur, Recepteur recipi, String contenue) {
         this.expediteur = expediteur;
         this.recipi = recipi;
-        this.conteneu = conteneu;
+        this.contenue = contenue;
     }
     
 }
