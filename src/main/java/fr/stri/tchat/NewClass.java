@@ -9,12 +9,18 @@ package fr.stri.tchat;
  *
  * @author thomas
  */
-public class NewClass {
+public class NewClass{
 
     public static void main(String[] args) {
-        Salon salon = new Salon();
-        Collaborateur collaborateur = new Collaborateur();
-        Message message = new Message(collaborateur, salon, "titi");
+        Salon salon = new Salon("Projet 1");
+        User collaborateur = new User(1, "User1", "pass1");
         Message message1 = new Message(collaborateur, collaborateur, "tata");
+        WindowAccueil fenetreAccueil = new WindowAccueil();
+        
+        /* Affichage de la fenetre d'accueil */
+        fenetreAccueil.setVisible(true);
+        
+        /* Recupération du login et mot de passe lorsqu'on clique sur Connexion */
+        
     }
 }

@@ -58,6 +58,11 @@ public class WindowAccueil extends javax.swing.JFrame {
         );
 
         jTextField1.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField1ActionPerformed(evt);
+            }
+        });
 
         jLabel2.setText("Login");
 
@@ -115,6 +120,14 @@ public class WindowAccueil extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        String login;
+        char[] passwd; /* type char[] pour pouvoir récupérer à partir d'un jPassword */
+        
+        login = jTextField1.getText();
+        passwd = jPasswordField1.getPassword();
+    }//GEN-LAST:event_jTextField1ActionPerformed
 
     /**
      * @param args the command line arguments

@@ -11,15 +11,57 @@ package fr.stri.tchat;
  */
 public class Message {
 
-    Collaborateur expediteur;
-    Recepteur recipi;
-    
-    String contenue;
+    /* ATTRIBUTS */
+    /* ID du message */   
+    int ID;
+    /* Expediteur du message */
+    User expediteur;
+    /* Recepteur du message */
+    User recepteur;
+    /* Corps du message */ 
+    String contenu;
 
-    public Message(Collaborateur expediteur, Recepteur recipi, String contenue) {
-        this.expediteur = expediteur;
-        this.recipi = recipi;
-        this.contenue = contenue;
+    
+    /* ***** CONSTRUCTEUR ***** */
+    public Message(User exp, User recep, String contenu) {
+        this.expediteur = exp;
+        this.recepteur = recep;
+        this.contenu = contenu;
     }
+    
+    /* ***** GETTER / SETTER ***** */
+    public int getID() {
+        return ID;
+    }
+
+    public void setID(int ID) {
+        this.ID = ID;
+    }
+
+    public User getExpediteur() {
+        return expediteur;
+    }
+
+    public void setExpediteur(User expediteur) {
+        this.expediteur = expediteur;
+    }
+
+    public User getRecepteur() {
+        return recepteur;
+    }
+
+    public void setRecepteur(User recepteur) {
+        this.recepteur = recepteur;
+    }
+
+    public String getContenu() {
+        return contenu;
+    }
+
+    public void setContenu(String contenu) {
+        this.contenu = contenu;
+    }
+    
+    
     
 }
