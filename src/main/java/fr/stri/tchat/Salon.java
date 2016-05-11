@@ -17,7 +17,7 @@ public class Salon {
     /* ***** ATTRIBUTS ***** */
     /* ID du salon */
     int ID;
-    /* Nom du salon */
+    /* Nom du salon */ 
     String nom;
     /* Liste messages */
     ArrayList <Message> liste_messages = new ArrayList<Message>();
