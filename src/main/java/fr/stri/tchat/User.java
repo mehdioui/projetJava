@@ -12,22 +12,29 @@ package fr.stri.tchat;
 public class User {
 
     /* ***** ATTRIBUTS ***** */
-    /* ID du user */    
+ /* ID du user */
     int ID;
-    /* Login du user */
+    /**
+     * Login du user *
+     */
     String login;
     /* Mot de passe du user */
     String passwd;
-    
-    /* ***** CONSTRUCTEUR ***** */
+
+    /**
+     * CONSTRUCTEUR *
+     * @param ID id utilisateur
+     * @param login
+     * @param passwd
+     */
     public User(int ID, String login, String passwd) {
         this.ID = ID;
         this.login = login;
         this.passwd = passwd;
-    }    
-    
+    }
+
     /* ***** GETTER / SETTER ***** */
-    /* Sur l'ID */
+ /* Sur l'ID */
     public int getID() {
         return ID;
     }
@@ -53,8 +60,5 @@ public class User {
     public void setPasswd(String passwd) {
         this.passwd = passwd;
     }
-
-
-    
 
 }

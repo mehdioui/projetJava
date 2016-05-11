@@ -11,6 +11,9 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,39 +22,40 @@ import java.util.logging.Logger;
  * @author thomas
  */
 class SGBDUtils {
-    
-   static int iduser_connecte;
+
+    static int iduser_connecte;
+
+    static String myDriver = "org.postgresql.Driver";
+    static String myUrl = "jdbc:postgresql://localhost/projetjava";
+    static Connection conn;
+    static Statement st;
 
     static boolean verifieMdp(String login, String passwd) {
         int i = 0;
         boolean tmp = false;
         try {
-            //
-            String myDriver = "org.postgresql.Driver";
-            String myUrl = "jdbc:postgresql://localhost/projetjava";
+
             Class.forName(myDriver);
 
             /* Connexion à la base de données */
-            Connection conn = DriverManager.getConnection(myUrl, "postgres", "rayane");
-            
+            conn = DriverManager.getConnection(myUrl, "postgres", "rayane");
+
             /* Construction requete */
-            String query = "select * from users where identifiant = '"+login+"' and password= '"+passwd+"'";
-            
+            String query = "select * from users where identifiant = '" + login + "' and password= '" + passwd + "'";
+
             /* ? */
-            Statement st=conn.createStatement();
-            
+            st = conn.createStatement();
+
             /* Envoi de la requete */
-            ResultSet result=st.executeQuery(query);
-            
-            ResultSetMetaData resultMeta = result.getMetaData();
-            
-            while(result.next()){
+            ResultSet result = st.executeQuery(query);
+
+            while (result.next()) {
                 i++;
                 SGBDUtils.iduser_connecte = result.getInt(1);
-                System.out.println("Id user = "+SGBDUtils.iduser_connecte);                       
+                System.out.println("Id user = " + SGBDUtils.iduser_connecte);
             }
-            
-            if (i == 1){
+
+            if (i == 1) {
                 tmp = true;
             }
         } catch (ClassNotFoundException | SQLException ex) {
@@ -61,9 +65,57 @@ class SGBDUtils {
         return tmp;
     }
 
-    static  recupSalon(int iduser_connecte) {
-        String query = "select nomsalon from salon,autorise where iduser = "+iduser_connecte+" and salon.idsalon = autorise.idsalon";
-        
+    public static List<String> recupSalon(int iduser_connecte) {
+        List<String> listeSalon = new ArrayList<String>();
+        String query = "select nomsalon from salon, autorise where autorise.iduser = " + iduser_connecte + " and salon.idsalon = autorise.idsalon";
+        int i = 0;
+        try {
+            /* Envoi de la requête à la base de données */
+            ResultSet result = st.executeQuery(query);
+
+            while (result.next()) {
+                System.out.println(result.getString(1));
+                listeSalon.add(result.getString(1));
+                i++;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(SGBDUtils.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return listeSalon;
+
+    }
+
+    static User getUser(String login) {
+        int i = 0;
+        User tmp = null;
+        try {
+
+            Class.forName(myDriver);
+
+            /* Connexion à la base de données */
+            conn = DriverManager.getConnection(myUrl, "postgres", "rayane");
+
+            /* Construction requete */
+            String query = "select * from users where identifiant = '" + login + "'";
+
+            /* ? */
+            st = conn.createStatement();
+
+            /* Envoi de la requete */
+            ResultSet result = st.executeQuery(query);
+
+            while (result.next()) {
+                i++;
+                SGBDUtils.iduser_connecte = result.getInt(1);
+                System.out.println("Id user = " + SGBDUtils.iduser_connecte);
+                tmp = new User(result.getInt("iduser"), result.getString("identifiant"), result.getString("password"));
+            }
+
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(SGBDUtils.class.getName()).log(Level.SEVERE, null, ex);
+            tmp = null;
+        }
+        return tmp;
     }
 
 }

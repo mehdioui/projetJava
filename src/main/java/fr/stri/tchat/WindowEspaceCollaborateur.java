@@ -5,18 +5,48 @@
  */
 package fr.stri.tchat;
 
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.DefaultListModel;
+
 /**
  *
  * @author thomas
  */
 public class WindowEspaceCollaborateur extends javax.swing.JFrame {
 
+    private final User utilisateur;
+    List<String> listeSalon;
+
     /**
      * Creates new form WindowEspaceCollaborateur
+     * @param utilisateur
      */
-    public WindowEspaceCollaborateur() {
+    public WindowEspaceCollaborateur(User utilisateur) {
         initComponents();
+        this.utilisateur = utilisateur;
+        refreshSalon();
     }
+
+    
+    private void refreshSalon(){
+        listeSalon = SGBDUtils.recupSalon(this.utilisateur.getID());
+        String nomSalon = "";
+        DefaultListModel<String> listeS = new DefaultListModel();
+        int i;
+        
+        
+        
+        for (i = 0; i < listeSalon.size(); i++){
+            nomSalon = listeSalon.get(i).toString();
+            System.out.println("nomSalon");
+            listeS.addElement(nomSalon);
+        }
+        
+        jList1.setModel(listeS);
+        
+    }  
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -60,18 +90,14 @@ public class WindowEspaceCollaborateur extends javax.swing.JFrame {
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
-        jList1.addAncestorListener(new javax.swing.event.AncestorListener() {
-            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
-            }
-            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
-                jList1AncestorAdded(evt);
-            }
-            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
-            }
-        });
         jScrollPane1.setViewportView(jList1);
 
         jButton1.setText("Ouvrir salon");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Déconnexion");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -85,15 +111,12 @@ public class WindowEspaceCollaborateur extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(124, 124, 124)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(126, Short.MAX_VALUE))
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(93, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1))
+                .addContainerGap(93, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -128,50 +151,19 @@ public class WindowEspaceCollaborateur extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     /* Remplir la liste des salons disponibles pour l'utilisateur connecté */
-     = SGBDUtils.recupSalon(SGBDUtils.iduser_connecte);
+    
     
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        this.dispose(); /* Fermer la fenêtre */
+        this.dispose();
+        /* Fermer la fenêtre */
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void jList1AncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jList1AncestorAdded
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jList1AncestorAdded
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        WindowTchat fenetreTchat = new WindowTchat();
+        fenetreTchat.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_jButton1ActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(WindowEspaceCollaborateur.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(WindowEspaceCollaborateur.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(WindowEspaceCollaborateur.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(WindowEspaceCollaborateur.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new WindowEspaceCollaborateur().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
