@@ -117,5 +117,43 @@ class SGBDUtils {
         }
         return tmp;
     }
+    
+    
+    /**
+     * Inserer le message d'une conversation dans la base de données
+     */
+    public static void insererMessageConversation(String message, String date) throws SQLException{
+        String insert_message = "INSERT INTO public.message(contenu, datereception) VALUES ('"+message+"', '"+date+"')";
+        ResultSet res = st.executeQuery(insert_message);
+        /* Récupération de l'ID du message */
+        //String recup_ID = "SELECT idmessage FROM message WHERE contenu = 'message'";
+        
+    }
+
+    
+    static void sendPrivatemessage(String destinataire,String contenu) throws SQLException{
+    	String format = "dd/MM/yy H:mm:ss";
+
+    	java.text.SimpleDateFormat formater = new java.text.SimpleDateFormat( format );
+    	java.util.Date date = new java.util.Date();
+
+    	String dat=formater.format( date );
+   	 
+    	String query = "INSERT INTO public.message( contenu, datereception)VALUES ('";
+    	query+=contenu+"',";
+    	query+="'"+dat+"')";
+   
+        /* Connexion à la base de données */
+     	 
+        /* ? */
+        	st = conn.createStatement();
+
+        	/* Envoi de la requete */
+        	ResultSet result = st.executeQuery(query);
+
+   	 
+    	System.out.println(query);
+
+	}
 
 }
