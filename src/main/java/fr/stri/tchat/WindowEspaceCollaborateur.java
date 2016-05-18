@@ -27,24 +27,19 @@ public class WindowEspaceCollaborateur extends javax.swing.JFrame {
         this.utilisateur = utilisateur;
         refreshSalon();
     }
-
     
     private void refreshSalon(){
         listeSalon = SGBDUtils.recupSalon(this.utilisateur.getID());
         String nomSalon = "";
         DefaultListModel<String> listeS = new DefaultListModel();
         int i;
-        
-        
-        
+              
         for (i = 0; i < listeSalon.size(); i++){
             nomSalon = listeSalon.get(i).toString();
             System.out.println("nomSalon");
             listeS.addElement(nomSalon);
-        }
-        
-        jList1.setModel(listeS);
-        
+        }       
+        jList1.setModel(listeS);     
     }  
     
 
@@ -159,7 +154,8 @@ public class WindowEspaceCollaborateur extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        WindowTchat fenetreTchat = new WindowTchat();
+        String nomSalon = jList1.getSelectedValue();
+        WindowTchat fenetreTchat = new WindowTchat(nomSalon);
         fenetreTchat.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
