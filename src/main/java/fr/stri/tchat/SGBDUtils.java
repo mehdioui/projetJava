@@ -253,24 +253,22 @@ class SGBDUtils {
                 System.out.println(iddest + " lid du destinataire");
             }
         } catch (SQLException e) {
-            System.out.println("execution requette select pour recuperer iddest echoué");
+            System.out.println("execution requete select pour recuperer iddest echoué");
         }
         //recuperation de l'id du message
         try {
-            query = "select * from message";
-            /* Envoi de la requete */
-
-            Statement stm = conn.createStatement();
-
-            ResultSet res = stm.executeQuery(query);
-
-            while (res.next()) {
-                idmessage++;
+            String req_ID_message = "SELECT idmessage FROM message ORDER BY idmessage DESC LIMIT 1";
+            ResultSet res_message = st.executeQuery(req_ID_message);
+            int i = 1;
+            while (i < 2) {
+                res_message.next();
+                idmessage = res_message.getInt(i);
+                i++;
             }
-            System.out.println("nbre message yen a :" + idmessage);
+            System.out.println("ID_message :" + idmessage);
 
         } catch (SQLException e) {
-            System.out.println("execution requette select nbligne des messages echoué");
+            System.out.println("execution requete select nbligne des messages echoués");
         }
 
         //insertion dans la table envoie iduserconnecte,iduserdestinataier,idmessage
