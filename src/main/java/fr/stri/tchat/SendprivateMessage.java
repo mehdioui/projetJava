@@ -99,6 +99,7 @@ public class SendprivateMessage extends javax.swing.JFrame {
             } catch (SQLException ex) {
                 Logger.getLogger(SendprivateMessage.class.getName()).log(Level.SEVERE, null, ex);
             }
+            this.setVisible(false);  
 	}                                	 
 
 	/**
