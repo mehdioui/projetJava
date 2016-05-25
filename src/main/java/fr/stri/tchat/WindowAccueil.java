@@ -78,9 +78,7 @@ public class WindowAccueil extends javax.swing.JFrame {
                 .addGap(141, 141, 141)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(16, 16, 16)))
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jbuttonconnexion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jTextField1)
@@ -135,8 +133,13 @@ public class WindowAccueil extends javax.swing.JFrame {
         if (verifOk) {
             User test = SGBDUtils.getUser(login);
             WindowEspaceCollaborateur fenetreConnexion = new WindowEspaceCollaborateur(test);
+            /* Le statut du user passe à connecté */
+            /* String query = "UPDATE TABLE users SET statut = 'connecte' WHERE iduser = test.getID()";
+               int update = executeUpdate(query);
+            */
             fenetreConnexion.setVisible(true);
             this.setVisible(false);
+            
         }
 
     }//GEN-LAST:event_jbuttonconnexionActionPerformed

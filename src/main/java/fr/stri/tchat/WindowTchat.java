@@ -1,4 +1,5 @@
 /*
+
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -6,9 +7,11 @@
 package fr.stri.tchat;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
+import javax.swing.ListModel;
 
 /**
  *
@@ -16,17 +19,50 @@ import javax.swing.DefaultListModel;
  */
 public class WindowTchat extends javax.swing.JFrame {
 
-    private DefaultListModel<String> liste = new DefaultListModel();
+    private final Salon salon;
+    List<String> listeMessage;
+    List<String> listeConnecte;
     
     /**
      * Creates new form WindowTchat
-     * @param nomSalon Nom du Salon ouvert
+     * @param salon Nom du Salon ouvert
      */
-    public WindowTchat(String nomSalon) {
+    public WindowTchat(Salon salon) {
         initComponents();
-        jLabelnomSalon.setText(nomSalon);
+        jLabelnomSalon.setText(salon.getNom());
+        this.salon = salon;
+        refreshMessage();
+        refreshConnecte();
     }
 
+    public void refreshConnecte(){
+        String nomuser;
+        int i;
+        listeConnecte = SGBDUtils.recupUserConnecte(this.salon.getNom());
+        DefaultListModel<String> listeC = new DefaultListModel();
+        
+        for (i = 0; i < listeConnecte.size(); i++){
+            nomuser = listeConnecte.get(i);
+            System.out.println(nomuser);
+            listeC.addElement(nomuser);
+        }       
+        jListConnectes.setModel(listeC); 
+    }
+    
+    public void refreshMessage(){
+        String message;
+        int i;
+        listeMessage = SGBDUtils.recupMessageSalon(this.salon.getID());
+        DefaultListModel<String> listeM = new DefaultListModel();
+        
+        for (i = 0; i < listeMessage.size(); i++){
+            message = listeMessage.get(i);
+            //System.out.println("message");
+            listeM.addElement(message);
+        }       
+        jListConversation.setModel(listeM); 
+    }
+    
     public String getNomSalon(){
           return jLabelnomSalon.getText();
     }
@@ -44,7 +80,7 @@ public class WindowTchat extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        jListConnectes = new javax.swing.JList<>();
         jLabel4 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -69,7 +105,7 @@ public class WindowTchat extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(264, 264, 264)
                 .addComponent(jLabel3)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(475, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -79,12 +115,7 @@ public class WindowTchat extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "User 1", "User 2", "User 3", "User 4" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane1.setViewportView(jList1);
+        jScrollPane1.setViewportView(jListConnectes);
 
         jLabel4.setText("Connecté(s)");
 
@@ -94,7 +125,9 @@ public class WindowTchat extends javax.swing.JFrame {
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 438, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -105,7 +138,7 @@ public class WindowTchat extends javax.swing.JFrame {
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 47, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -154,8 +187,8 @@ public class WindowTchat extends javax.swing.JFrame {
                         .addGap(25, 25, 25)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jScrollPane1)
-                            .addComponent(jButtonMessagePrive, javax.swing.GroupLayout.DEFAULT_SIZE, 103, Short.MAX_VALUE))))
+                            .addComponent(jButtonMessagePrive, javax.swing.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(48, 48, 48)
@@ -212,7 +245,7 @@ public class WindowTchat extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -235,22 +268,35 @@ public class WindowTchat extends javax.swing.JFrame {
      */
     private void jButtonEcrireActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEcrireActionPerformed
        /* Récupération du message */
-       String message = jTextAreaMessage.getText(); 
+       int i;
+       String next_message="";
+       String message = jTextAreaMessage.getText();
+       DefaultListModel<String> listeMes = new DefaultListModel();
       
+       /* Ajout du nouveau message dans la liste du salon */
+       listeMessage.add(message);
+       
+       for (i = 0; i < listeMessage.size(); i++){
+            next_message = listeMessage.get(i);
+            System.out.println(next_message);
+            listeMes.addElement(next_message);
+        }
+ 
+       /* Affichage dans la fenetre de conversation */ 
+       jListConversation.setModel(listeMes);
+       
        /* Recuperer la date du message */
        String format = "dd/MM/yy H:mm:ss";
        java.text.SimpleDateFormat formater = new java.text.SimpleDateFormat(format);
        java.util.Date date = new java.util.Date();
        String dat = formater.format(date);
        
-       liste.addElement(message);
-       /* Affichage dans la fenetre de conversation */
-      jListConversation.setModel(liste);
       /* Vider la zone de saisie du message  */
       jTextAreaMessage.setText("");
+
         try {
             /* INSERT du message dans la base de données */    
-            SGBDUtils.insererMessageConversation(message, dat);
+            SGBDUtils.insererMessageConversation(message, dat, getNomSalon());
         } catch (SQLException ex) {
             Logger.getLogger(WindowTchat.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -304,7 +350,7 @@ public class WindowTchat extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabelnomSalon;
-    private javax.swing.JList<String> jList1;
+    private javax.swing.JList<String> jListConnectes;
     private javax.swing.JList<String> jListConversation;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;

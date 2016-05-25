@@ -35,7 +35,7 @@ public class WindowEspaceCollaborateur extends javax.swing.JFrame {
         int i;
               
         for (i = 0; i < listeSalon.size(); i++){
-            nomSalon = listeSalon.get(i).toString();
+            nomSalon = listeSalon.get(i);
             System.out.println("nomSalon");
             listeS.addElement(nomSalon);
         }       
@@ -155,7 +155,8 @@ public class WindowEspaceCollaborateur extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         String nomSalon = jList1.getSelectedValue();
-        WindowTchat fenetreTchat = new WindowTchat(nomSalon);
+        Salon salon = SGBDUtils.getSalon(nomSalon);
+        WindowTchat fenetreTchat = new WindowTchat(salon);
         fenetreTchat.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed

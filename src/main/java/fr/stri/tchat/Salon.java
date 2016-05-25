@@ -12,7 +12,6 @@ import java.util.ArrayList;
  * @author thomas
  */
 public class Salon {
-
     
     /* ***** ATTRIBUTS ***** */
     /* ID du salon */
@@ -25,11 +24,19 @@ public class Salon {
     ArrayList <User> liste_users = new ArrayList<User>();
 
     /* ***** CONSTRUCTEUR ***** */ 
-    public Salon(String nom) {
-        this.nom = nom;
+    public Salon(String nomSalon) {
+        this.nom = nomSalon;
     }
     
     /* ***** GETTER / SETTER ***** */
+    public int getID(){
+        return ID;
+    }
+
+    public void setID(int id){
+        this.ID = id;
+    }
+    
     public String getNom() {
         return nom;
     }

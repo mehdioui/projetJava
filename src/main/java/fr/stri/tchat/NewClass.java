@@ -37,8 +37,8 @@ public class NewClass{
       Message message1 = new Message(collaborateur, collaborateur, "tata");
       WindowAccueil fenetreAccueil = new WindowAccueil(); 
         
-        /* Affichage de la fenetre d'accueil */
-        fenetreAccueil.setVisible(true);
+      /* Affichage de la fenetre d'accueil */
+      fenetreAccueil.setVisible(true);
        
         
     }

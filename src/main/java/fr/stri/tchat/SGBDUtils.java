@@ -7,6 +7,7 @@ package fr.stri.tchat;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -29,6 +30,7 @@ class SGBDUtils {
     static String myUrl = "jdbc:postgresql://localhost/projetjava";
     static Connection conn;
     static Statement st;
+    static String mdp_connexion = "123456";
 
     static boolean verifieMdp(String login, String passwd) {
         int i = 0;
@@ -38,10 +40,10 @@ class SGBDUtils {
             Class.forName(myDriver);
 
             /* Connexion à la base de données */
-            conn = DriverManager.getConnection(myUrl, "postgres", "rayane");
+            conn = DriverManager.getConnection(myUrl, "postgres", mdp_connexion);
 
             /* Construction requete */
-            String query = "select * from users where identifiant = '" + login + "' and password= '" + passwd + "'";
+            String query = "select * from public.users where identifiant = '" + login + "' and password= '" + passwd + "'";
 
             /* ? */
             st = conn.createStatement();
@@ -84,6 +86,33 @@ class SGBDUtils {
         return listeSalon;
 
     }
+    
+    /**
+     * Recuperer la liste des personnes connectées pour un salon donné
+     * @param id_salon id du salon pour lequel on souhaite récupérer les personnes connectées
+     * @return une liste des noms des personnes connectées
+     */
+    public static List<String> recupUserConnecte(String nom_salon){
+        List<String> listeConnect = new ArrayList<String>();
+        
+        String query = "select distinct identifiant from autorise,users,salon where autorise.iduser = users.iduser and autorise.idsalon = salon.idsalon and salon.nomsalon = '"+nom_salon+"' and users.statut = 'connecte'";
+        
+        int i = 0;
+        try {
+            /* Envoi de la requête à la base de données */
+            ResultSet result = st.executeQuery(query);
+
+            /* On parcourt le resultat de la requete pour construire la chaine de retour */
+            while (result.next()) {
+                System.out.println(result.getString(1));
+                listeConnect.add(result.getString(1));
+                i++;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(SGBDUtils.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return listeConnect;
+    }
 
     static User getUser(String login) {
         int i = 0;
@@ -93,7 +122,7 @@ class SGBDUtils {
             Class.forName(myDriver);
 
             /* Connexion à la base de données */
-            conn = DriverManager.getConnection(myUrl, "postgres", "rayane");
+            conn = DriverManager.getConnection(myUrl, "postgres", mdp_connexion);
 
             /* Construction requete */
             String query = "select * from users where identifiant = '" + login + "'";
@@ -117,17 +146,76 @@ class SGBDUtils {
         }
         return tmp;
     }
+
     
+    static Salon getSalon(String nomSalon) {
+        Salon tmpS = new Salon(nomSalon);
+        int id_salon;
+        try {
+
+            Class.forName(myDriver);
+
+            /* Connexion à la base de données */
+            conn = DriverManager.getConnection(myUrl, "postgres", mdp_connexion);
+
+            /* Construction requete */
+            String query = "select * from salon where nomsalon = '" + nomSalon + "'";
+
+            st = conn.createStatement();
+
+            /* Envoi de la requete */
+            ResultSet result = st.executeQuery(query);
+
+            while (result.next()){
+                id_salon = result.getInt(1);
+                tmpS.setID(id_salon);
+            }
+
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(SGBDUtils.class.getName()).log(Level.SEVERE, null, ex);
+            tmpS = null;
+        }
+        return tmpS;
+    }    
     
     /**
      * Inserer le message d'une conversation dans la base de données
+     * Inserer le message dans la table message
+     * Inserer le message dans la table tchate
      */
-    public static void insererMessageConversation(String message, String date) throws SQLException{
-        String insert_message = "INSERT INTO public.message(contenu, datereception) VALUES ('"+message+"', '"+date+"')";
-        ResultSet res = st.executeQuery(insert_message);
-        /* Récupération de l'ID du message */
-        //String recup_ID = "SELECT idmessage FROM message WHERE contenu = 'message'";
+    public static void insererMessageConversation(String message, String date, String nomSalon) throws SQLException{
+        int ID_message = 0;
+        int ID_salon = 0;
+        int res_insert_message = 0;   
+        int i = 1;
         
+        /* Insertion du message dans la table message */
+        String insert_message = "INSERT INTO public.message(contenu, datereception) VALUES ('"+message+"','"+date+"')";
+        System.out.println(insert_message);
+        Statement stmt = conn.createStatement();
+        stmt.executeUpdate(insert_message);
+        
+        /* Récupération de l'ID du message */
+        String req_ID_message = "SELECT idmessage FROM message ORDER BY idmessage DESC LIMIT 1";
+        ResultSet res_message = st.executeQuery(req_ID_message);
+        while (i < 2){
+            res_message.next();
+            ID_message = res_message.getInt(i);
+            i++;
+        }
+        System.out.println("ID Message = "+ID_message);
+        
+        /* Recupération de l'ID du salon */
+        String req_ID_salon = "SELECT idsalon FROM salon WHERE nomsalon = '"+nomSalon+"'";
+        ResultSet res_salon = st.executeQuery(req_ID_salon);
+        while (res_salon.next()){
+            ID_salon =  res_salon.getInt(1);
+        }
+        System.out.println("ID salon "+ID_salon);
+        
+        /* Insertion dans la table tchate */
+        String req_tchate = "INSERT INTO public.tchate(idsalon, idmessage, iduser) VALUES ("+ID_salon+", "+ID_message+", "+SGBDUtils.iduser_connecte+")";
+        int res_insert_tchate = st.executeUpdate(req_tchate);
     }
 
     
@@ -150,10 +238,34 @@ class SGBDUtils {
 
         	/* Envoi de la requete */
         	ResultSet result = st.executeQuery(query);
-
-   	 
     	System.out.println(query);
 
 	}
+    
+    /**
+     * Récuperation de la liste des messages appartenant à un salon
+     * @param id_salon ID du salon pour lequel on souhaite récupérer les messages
+     * @return Retourne la liste des messages du salon
+     */
+    public static List<String> recupMessageSalon(int id_salon) {
+        List<String> listeMessage = new ArrayList<>();
+        /* Construction de la requête */
+        String query = "SELECT contenu FROM message, tchate WHERE tchate.idmessage = message.idmessage AND tchate.idsalon = " +id_salon;
+        int i = 0;
+        try {
+            /* Envoi de la requête à la base de données */
+            ResultSet result = st.executeQuery(query);
 
+            /* On parcourt le resultat de la requete pour construire la chaine de retour */
+            while (result.next()) {
+                System.out.println(result.getString(1));
+                listeMessage.add(result.getString(1));
+                i++;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(SGBDUtils.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return listeMessage;
+    }
+    
 }
