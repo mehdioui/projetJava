@@ -27,7 +27,7 @@ class SGBDUtils {
     static String myUrl = "jdbc:postgresql://localhost/projetjava";
     static Connection conn;
     static Statement st;
-    static String mdp_connexion = "123456";
+    static String mdp_connexion = "rayane";
 
     static boolean verifieMdp(String login, String passwd) {
         int i = 0;

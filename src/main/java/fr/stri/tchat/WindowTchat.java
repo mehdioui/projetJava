@@ -6,12 +6,15 @@
  */
 package fr.stri.tchat;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.ListModel;
+import javax.swing.Timer;
 
 /**
  *
@@ -22,51 +25,67 @@ public class WindowTchat extends javax.swing.JFrame {
     private final Salon salon;
     List<String> listeMessage;
     List<String> listeConnecte;
-    
+
     /**
      * Creates new form WindowTchat
+     *
      * @param salon Nom du Salon ouvert
      */
     public WindowTchat(Salon salon) {
         initComponents();
         jLabelnomSalon.setText(salon.getNom());
         this.salon = salon;
-        refreshMessage();
-        refreshConnecte();
+
+        Timer timer1 = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                refreshMessage();
+            }
+        });
+        timer1.start();
+        Timer timer2 = new Timer(10000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                refreshConnecte();
+            }
+        });
+        timer2.start();
+        //refreshMessage();
+        //refreshConnecte();
     }
 
-    public void refreshConnecte(){
+    public void refreshConnecte() {
         String nomuser;
         int i;
         listeConnecte = SGBDUtils.recupUserConnecte(this.salon.getNom());
         DefaultListModel<String> listeC = new DefaultListModel();
-        
-        for (i = 0; i < listeConnecte.size(); i++){
+
+        for (i = 0; i < listeConnecte.size(); i++) {
             nomuser = listeConnecte.get(i);
             System.out.println(nomuser);
             listeC.addElement(nomuser);
-        }       
-        jListConnectes.setModel(listeC); 
+        }
+        jListConnectes.setModel(listeC);
     }
-    
-    public void refreshMessage(){
+
+    public void refreshMessage() {
         String message;
         int i;
         listeMessage = SGBDUtils.recupMessageSalon(this.salon.getID());
         DefaultListModel<String> listeM = new DefaultListModel();
-        
-        for (i = 0; i < listeMessage.size(); i++){
+
+        for (i = 0; i < listeMessage.size(); i++) {
             message = listeMessage.get(i);
             //System.out.println("message");
             listeM.addElement(message);
-        }       
-        jListConversation.setModel(listeM); 
+        }
+        jListConversation.setModel(listeM);
     }
-    
-    public String getNomSalon(){
-          return jLabelnomSalon.getText();
+
+    public String getNomSalon() {
+        return jLabelnomSalon.getText();
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -94,7 +113,6 @@ public class WindowTchat extends javax.swing.JFrame {
         jScrollPane4 = new javax.swing.JScrollPane();
         jTextAreaMessage = new javax.swing.JTextArea();
         jLabelnomSalon = new javax.swing.JLabel();
-        Refresh = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -177,13 +195,6 @@ public class WindowTchat extends javax.swing.JFrame {
 
         jLabelnomSalon.setText("Nom du Salon");
 
-        Refresh.setText("Refresh");
-        Refresh.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                RefreshActionPerformed(evt);
-            }
-        });
-
         jButton1.setText("boite de reception");
         jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -226,14 +237,9 @@ public class WindowTchat extends javax.swing.JFrame {
                                 .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addGap(31, 31, 31))
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGap(228, 228, 228)
-                                .addComponent(jLabelnomSalon))
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGap(198, 198, 198)
-                                .addComponent(Refresh, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGap(228, 228, 228)
+                        .addComponent(jLabelnomSalon)
+                        .addContainerGap(246, Short.MAX_VALUE))))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -262,12 +268,9 @@ public class WindowTchat extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel4Layout.createSequentialGroup()
                         .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
-                .addGap(18, 18, 18)
                 .addComponent(jButtonEcrire)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton3)
-                    .addComponent(Refresh, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
+                .addComponent(jButton3)
                 .addContainerGap())
         );
 
@@ -290,43 +293,46 @@ public class WindowTchat extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        this.dispose(); /* Fermer la fenetre */
+        this.dispose();
+        /* Fermer la fenetre */
     }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
-     * Affichage dans la fenetre de la conversation et INSERT dans la base de données
-     * @param evt 
+     * Affichage dans la fenetre de la conversation et INSERT dans la base de
+     * données
+     *
+     * @param evt
      */
     private void jButtonEcrireActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEcrireActionPerformed
-       /* Récupération du message */
-       int i;
-       String next_message="";
-       String message = jTextAreaMessage.getText();
-       DefaultListModel<String> listeMes = new DefaultListModel();
-      
-       /* Ajout du nouveau message dans la liste du salon */
-       listeMessage.add(message);
-       
-       for (i = 0; i < listeMessage.size(); i++){
+        /* Récupération du message */
+        int i;
+        String next_message = "";
+        String message = jTextAreaMessage.getText();
+        DefaultListModel<String> listeMes = new DefaultListModel();
+
+        /* Ajout du nouveau message dans la liste du salon */
+        listeMessage.add(message);
+
+        for (i = 0; i < listeMessage.size(); i++) {
             next_message = listeMessage.get(i);
             System.out.println(next_message);
             listeMes.addElement(next_message);
         }
- 
-       /* Affichage dans la fenetre de conversation */ 
-       jListConversation.setModel(listeMes);
-       
-       /* Recuperer la date du message */
-       String format = "dd/MM/yy H:mm:ss";
-       java.text.SimpleDateFormat formater = new java.text.SimpleDateFormat(format);
-       java.util.Date date = new java.util.Date();
-       String dat = formater.format(date);
-       
-      /* Vider la zone de saisie du message  */
-      jTextAreaMessage.setText("");
+
+        /* Affichage dans la fenetre de conversation */
+        jListConversation.setModel(listeMes);
+
+        /* Recuperer la date du message */
+        String format = "dd/MM/yy H:mm:ss";
+        java.text.SimpleDateFormat formater = new java.text.SimpleDateFormat(format);
+        java.util.Date date = new java.util.Date();
+        String dat = formater.format(date);
+
+        /* Vider la zone de saisie du message  */
+        jTextAreaMessage.setText("");
 
         try {
-            /* INSERT du message dans la base de données */    
+            /* INSERT du message dans la base de données */
             SGBDUtils.insererMessageConversation(message, dat, getNomSalon());
         } catch (SQLException ex) {
             Logger.getLogger(WindowTchat.class.getName()).log(Level.SEVERE, null, ex);
@@ -351,10 +357,6 @@ public class WindowTchat extends javax.swing.JFrame {
         }
         boite.setVisible(true);
     }//GEN-LAST:event_jButton1MouseClicked
-
-    private void RefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshActionPerformed
-        refreshMessage();
-    }//GEN-LAST:event_RefreshActionPerformed
 
     /**
      * @param args the command line arguments
@@ -384,7 +386,7 @@ public class WindowTchat extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-       /* java.awt.EventQueue.invokeLater(new Runnable() {
+ /* java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new WindowTchat().setVisible(true);
             }
@@ -392,7 +394,6 @@ public class WindowTchat extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton Refresh;
     private javax.swing.Box.Filler filler1;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton3;
@@ -414,4 +415,3 @@ public class WindowTchat extends javax.swing.JFrame {
     private javax.swing.JTextArea jTextAreaMessage;
     // End of variables declaration//GEN-END:variables
 }
-
