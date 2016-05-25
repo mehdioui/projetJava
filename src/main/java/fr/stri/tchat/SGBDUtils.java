@@ -132,28 +132,88 @@ class SGBDUtils {
 
     
     static void sendPrivatemessage(String destinataire,String contenu) throws SQLException{
-    	String format = "dd/MM/yy H:mm:ss";
-
+    	int idmessage=0;//id du message envoyé
+        int iddest=0;//id du destinataire
+        /*recuperation de la date */
+        String format = "dd/MM/yy H:mm:ss";
+        int a;
     	java.text.SimpleDateFormat formater = new java.text.SimpleDateFormat( format );
     	java.util.Date date = new java.util.Date();
 
     	String dat=formater.format( date );
-   	 
+   	// insertion du message dans la bdd 
     	String query = "INSERT INTO public.message( contenu, datereception)VALUES ('";
     	query+=contenu+"',";
     	query+="'"+dat+"')";
-   
-        /* Connexion à la base de données */
-     	 
-        /* ? */
-        	st = conn.createStatement();
-
+        System.out.println(query);
+        
+        try{
         	/* Envoi de la requete */
-        	ResultSet result = st.executeQuery(query);
-
-   	 
-    	System.out.println(query);
-
-	}
-
+            Statement stmt=conn.createStatement();
+            //isertion du message dans la table user
+           stmt.executeQuery(query);
+         
+        }catch(SQLException e){
+            
+        }
+        
+        //recuperation de l'iduser du destinataire
+        
+        
+        try{
+        String req="SELECT iduser from users where identifiant='"+destinataire+"'";
+        System.out.println(req);
+        
+            Statement st1=conn.createStatement();
+            ResultSet result1 = st1.executeQuery(req);
+            while(result1.next()){
+             
+                iddest = result1.getInt(1);
+                System.out.println(iddest+" lid du destinataire");
+         }
+        }catch(SQLException e){
+          System.out.println("execution requette select pour recuperer iddest echoué");
+        }
+       //recuperation de l'id du message
+        try{
+            query="select * from message";
+        	/* Envoi de la requete */
+        
+        Statement stm=conn.createStatement();
+        
+          ResultSet res= stm.executeQuery(query);
+          
+          while(res.next()){
+             idmessage++;
+          }
+          System.out.println("nbre message yen a :"+idmessage);
+          
+        }catch(SQLException e){
+            System.out.println("execution requette select nbligne des messages echoué");
+        }
+        
+        //insertion dans la table envoie iduserconnecte,iduserdestinataier,idmessage
+        int iduser_conn=SGBDUtils.iduser_connecte;
+        
+       try{
+            query="INSERT INTO public.envoie(iduser2, iduser, idmessage)VALUES ("+iduser_conn+","+iddest+","+ idmessage +")";
+            System.out.println(query);
+        	/* Envoi de la requete */
+       Statement s=conn.createStatement();
+       
+          
+                 s.executeQuery(query);
+                 
+       
+        }catch(SQLException e){
+            System.out.println("execution requette insrtion envoie");
+        } 
+     
+    }
+    
+   
+   
 }
+    
+    
+
