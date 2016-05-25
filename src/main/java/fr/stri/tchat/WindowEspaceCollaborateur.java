@@ -5,8 +5,14 @@
  */
 package fr.stri.tchat;
 
+import static fr.stri.tchat.SGBDUtils.st;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 
 /**
@@ -154,11 +160,34 @@ public class WindowEspaceCollaborateur extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        int iddroit=0;
+        //recuperation du droit sur ce salon
         String nomSalon = jList1.getSelectedValue();
+        String query="select iddroit from autorise,salon where autorise.idsalon=salon.idsalon and autorise.iduser="
+                +SGBDUtils.iduser_connecte+" and nomsalon='"+ nomSalon+"'";
+        try {
+            Statement a=SGBDUtils.conn.createStatement();
+             ResultSet result = a.executeQuery(query);
+
+            while (result.next()) {
+                 iddroit=result.getInt(1);//recuperation du droit
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(WindowEspaceCollaborateur.class.getName()).log(Level.SEVERE, null, ex);
+        }
         Salon salon = SGBDUtils.getSalon(nomSalon);
+        if(iddroit == 0){//droit de lecture et d'ecriture
         WindowTchat fenetreTchat = new WindowTchat(salon);
         fenetreTchat.setVisible(true);
-        this.setVisible(false);
+        this.setVisible(false);}
+        else if(iddroit== 1){//droit de lecture  donc on affiche la fenetre sans l'espace d'ecriture
+            windowtchat_restreinte fenetreTchat =new windowtchat_restreinte(salon);
+            fenetreTchat.setVisible(true);
+            this.setVisible(false);
+        }
+        else{
+            System.out.println("la gestion du droit s'est mal passé");
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
 

@@ -28,6 +28,7 @@ class SGBDUtils {
     static Connection conn;
     static Statement st;
     static String mdp_connexion = "rayane";
+    static int droit;
 
     static boolean verifieMdp(String login, String passwd) {
         int i = 0;
