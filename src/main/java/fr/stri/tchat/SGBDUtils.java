@@ -60,6 +60,10 @@ class SGBDUtils {
                 System.out.println("Id user = " + SGBDUtils.iduser_connecte);
             }
 
+            String req_connexion = "update public.users set statut = 'connecte' where iduser = "+iduser_connecte;
+            /* Execution de la requete */
+            int res_update = st.executeUpdate(req_connexion);
+            
             if (i == 1) {
                 tmp = true;
             }
@@ -527,6 +531,24 @@ class SGBDUtils {
         } catch (SQLException ex) {
             Logger.getLogger(SGBDUtils.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    /**
+     * Mettre à jour la base de données
+     * @param id_user 
+     */
+    static void deconnexion(int id_user){
+        String query = "update public.users set statut = 'hors ligne' where iduser = "+id_user;
+        /* Execution de la requete */
+        try{
+            int res_update = st.executeUpdate(query);
+        } catch (SQLException ex) {
+            Logger.getLogger(SGBDUtils.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    static void delUserSalon(String nom, String salon){
+        
     }
     
 }

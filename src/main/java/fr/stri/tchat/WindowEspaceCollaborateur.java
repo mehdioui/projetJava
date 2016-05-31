@@ -155,6 +155,7 @@ public class WindowEspaceCollaborateur extends javax.swing.JFrame {
     
     
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        SGBDUtils.deconnexion(SGBDUtils.iduser_connecte);
         this.dispose();
         /* Fermer la fenêtre */
     }//GEN-LAST:event_jButton2ActionPerformed
