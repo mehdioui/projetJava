@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.Timer;
 
-/**
+/*
  *
  * @author thomas
  */
@@ -218,6 +218,11 @@ public class windowtchat_restreinte extends javax.swing.JFrame {
             fenetreMessagePrive.setVisible(true);
     }                                        
 
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        // TODO add your handling code here:
+            this.dispose();
+    }    
+    
     /**
      * @param args the command line arguments
      */

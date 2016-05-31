@@ -123,6 +123,7 @@ public class WindowAccueil extends javax.swing.JFrame {
     private void jbuttonconnexionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbuttonconnexionActionPerformed
         String login;
         String passwd;
+        int droit;
 
         /* Récupération du login et du mot de passe */
         login = jTextField1.getText();
@@ -132,14 +133,24 @@ public class WindowAccueil extends javax.swing.JFrame {
 
         if (verifOk) {
             User test = SGBDUtils.getUser(login);
-            WindowEspaceCollaborateur fenetreConnexion = new WindowEspaceCollaborateur(test);
+            /*String admin = "admin";*/
+            droit = SGBDUtils.verifierDroits(login);
+            System.err.println("Droit accueil "+droit);
+            /*System.out.println("Droit : "+droit);*/
+            /* Tester les droits pour determiner la fenetre à ouvrir */
+            if (droit == 0){
+                WindowEspaceCollaborateur fenetreConnexion = new WindowEspaceCollaborateur(test);
+                fenetreConnexion.setVisible(true);
+                this.setVisible(false);
+            } else {
+                EspaceAdmin fenetreAdmin = new EspaceAdmin(test);
+                fenetreAdmin.setVisible(true);
+                this.setVisible(false);
+            }
             /* Le statut du user passe à connecté */
             /* String query = "UPDATE TABLE users SET statut = 'connecte' WHERE iduser = test.getID()";
                int update = executeUpdate(query);
-            */
-            fenetreConnexion.setVisible(true);
-            this.setVisible(false);
-            
+            */      
         }
 
     }//GEN-LAST:event_jbuttonconnexionActionPerformed

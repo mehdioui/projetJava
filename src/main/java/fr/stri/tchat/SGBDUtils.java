@@ -22,14 +22,19 @@ import java.util.logging.Logger;
 class SGBDUtils {
 
     static int iduser_connecte;
-
+    static int droit;
     static String myDriver = "org.postgresql.Driver";
     static String myUrl = "jdbc:postgresql://localhost/projetjava";
     static Connection conn;
     static Statement st;
-    static String mdp_connexion = "rayane";
-    static int droit;
+    static String mdp_connexion = "123456";
 
+    /**
+     * Vérifier l'authentification d'un utilsateur
+     * @param login
+     * @param passwd
+     * @return 
+     */
     static boolean verifieMdp(String login, String passwd) {
         int i = 0;
         boolean tmp = false;
@@ -65,6 +70,11 @@ class SGBDUtils {
         return tmp;
     }
 
+    /**
+     * Recupérer la liste des salons sur lesquels un user est autorisé
+     * @param iduser_connecte
+     * @return 
+     */
     public static List<String> recupSalon(int iduser_connecte) {
         List<String> listeSalon = new ArrayList<String>();
         String query = "select nomsalon from salon, autorise where autorise.iduser = " + iduser_connecte + " and salon.idsalon = autorise.idsalon";
@@ -82,12 +92,39 @@ class SGBDUtils {
             Logger.getLogger(SGBDUtils.class.getName()).log(Level.SEVERE, null, ex);
         }
         return listeSalon;
-
     }
 
     /**
+     * Recuperer la liste des personnes d'un salon donné
+     * @param id_salon id du salon pour lequel on souhaite récupérer les
+     * users
+     * @return une liste des noms des personnes du salon
+     */
+    public static List<String> recupUserSalon(String nom_salon) {
+        List<String> listeUser = new ArrayList<>();
+
+        String query = "select distinct identifiant from autorise,users,salon where autorise.iduser = users.iduser and autorise.idsalon = salon.idsalon and salon.nomsalon = '" + nom_salon + "'";
+
+        int i = 0;
+        try {
+            /* Envoi de la requête à la base de données */
+            ResultSet result = st.executeQuery(query);
+
+            /* On parcourt le resultat de la requete pour construire la chaine de retour */
+            while (result.next()) {
+                System.out.println(result.getString(1));
+                listeUser.add(result.getString(1));
+                i++;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(SGBDUtils.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return listeUser;
+    }
+    
+    
+    /**
      * Recuperer la liste des personnes connectées pour un salon donné
-     *
      * @param id_salon id du salon pour lequel on souhaite récupérer les
      * personnes connectées
      * @return une liste des noms des personnes connectées
@@ -113,7 +150,84 @@ class SGBDUtils {
         }
         return listeConnect;
     }
+    
+    /**
+     * Verifier si une personne qui se connecte est un collaborateur ou un administateur
+     * @param login
+     * @return 
+     */
+    static int verifierDroits(String login){
+        String droit = "";
+        /* Construction de la requete */
+        String query = "select droit from public.users where identifiant ='"+login+"'";
+        /* Envoi de la requete */
+        int i = 0;
+        int ret = 0;
+        try {
+            /* Envoi de la requête à la base de données */
+            ResultSet result = st.executeQuery(query);
 
+            /* On parcourt le resultat de la requete pour construire la chaine de retour */
+            while (result.next()) {
+                droit = result.getString(1);
+                System.out.println("Droit"+droit);
+                i++;
+            }
+            
+            if ("collaborateur".compareTo(droit) == -37){ /* Problème de retour du compareTo */
+                ret = 0;
+            } else {
+                ret = 1;
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(SGBDUtils.class.getName()).log(Level.SEVERE, null, ex);
+        }     
+        return ret;
+    }
+    
+    /**
+     * Obtenir un User à partir de son ID
+     * @param id
+     * @return 
+     */
+    static User getUserId(int id){
+        User tmp = null;
+        
+        try {
+
+            Class.forName(myDriver);
+
+            /* Connexion à la base de données */
+            conn = DriverManager.getConnection(myUrl, "postgres", mdp_connexion);
+
+            /* Construction requete */
+            String query = "select * from users where iduser = '" + id + "'";
+
+            /* ? */
+            st = conn.createStatement();
+
+            /* Envoi de la requete */
+            ResultSet result = st.executeQuery(query);
+
+            while (result.next()) {
+                SGBDUtils.iduser_connecte = result.getInt(1);
+                tmp = new User(result.getInt("iduser"), result.getString("identifiant"), result.getString("password"));
+            }
+
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(SGBDUtils.class.getName()).log(Level.SEVERE, null, ex);
+            tmp = null;
+        }
+        return tmp;
+    }
+
+    
+    /**
+     * Obtenir un User à partir de son identifiant
+     * @param login Identifiant du User que l'on veut récupérer
+     * @return 
+     */
     static User getUser(String login) {
         int i = 0;
         User tmp = null;
@@ -147,6 +261,38 @@ class SGBDUtils {
         return tmp;
     }
 
+    /**
+     * Obtenir la liste de tous les users de la base de données
+     * @return 
+     */
+    static List<String> getAllUsers(){
+        List<String> listeUser = new ArrayList<>();
+        
+        String query = "select identifiant from public.users";
+       
+        int i = 0;
+        try {
+            /* Envoi de la requête à la base de données */
+            ResultSet result = st.executeQuery(query);
+
+            /* On parcourt le resultat de la requete pour construire la chaine de retour */
+            while (result.next()) {
+                System.out.println(result.getString(1));
+                listeUser.add(result.getString(1));
+                i++;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(SGBDUtils.class.getName()).log(Level.SEVERE, null, ex);
+        }   
+        
+        return listeUser; 
+    }    
+    
+    /**
+     * Obtenir un salon à partir de son nom
+     * @param nomSalon
+     * @return 
+     */
     static Salon getSalon(String nomSalon) {
         Salon tmpS = new Salon(nomSalon);
         int id_salon;
@@ -180,6 +326,10 @@ class SGBDUtils {
     /**
      * Inserer le message d'une conversation dans la base de données Inserer le
      * message dans la table message Inserer le message dans la table tchate
+     * @param message
+     * @param date
+     * @param nomSalon
+     * @throws SQLException 
      */
     public static void insererMessageConversation(String message, String date, String nomSalon) throws SQLException {
         int ID_message = 0;
@@ -216,6 +366,12 @@ class SGBDUtils {
         int res_insert_tchate = st.executeUpdate(req_tchate);
     }
 
+    /**
+     * Envoyer un message privé
+     * @param destinataire
+     * @param contenu
+     * @throws SQLException 
+     */
     static void sendPrivatemessage(String destinataire, String contenu) throws SQLException {
         int idmessage = 0;//id du message envoyé
         int iddest = 0;//id du destinataire
@@ -227,7 +383,7 @@ class SGBDUtils {
 
         String dat = formater.format(date);
         // insertion du message dans la bdd 
-        String query = "INSERT INTO public.message( contenu, datereception)VALUES ('";
+        String query = "INSERT INTO public.message(contenu, datereception)VALUES ('";
         query += contenu + "',";
         query += "'" + dat + "')";
         System.out.println(query);
@@ -291,7 +447,6 @@ class SGBDUtils {
 
     /**
      * Récuperation de la liste des messages appartenant à un salon
-     *
      * @param id_salon ID du salon pour lequel on souhaite récupérer les
      * messages
      * @return Retourne la liste des messages du salon
@@ -317,4 +472,61 @@ class SGBDUtils {
         return listeMessage;
     }
 
+    /**
+     * Insérer un salon dans la base de données
+     * @param nomSalon 
+     */
+    static void insererSalon(String nomSalon) {
+        try {
+            /* Creation de la requete */
+            String reqInsererSalon = "INSERT INTO salon (nomsalon, iduser) VALUES('"+nomSalon+"', "+iduser_connecte+")";
+            /* Execution de la requete */
+            int res_insert_salon = st.executeUpdate(reqInsererSalon);
+        } catch (SQLException ex) {
+            Logger.getLogger(SGBDUtils.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    /**
+     * Obtenir la liste des salons des salons administrés par un user
+     * @param iduser_connecte
+     * @return 
+     */
+    static List<String> getSalonAdministre(int iduser_connecte){
+            List<String> listeSalonAdmin = new ArrayList<>();
+            String nom ="";
+            
+            String query = "select distinct nomsalon from public.salon as s where iduser = "+SGBDUtils.iduser_connecte;
+        try{    
+            /* Envoi de la requete */
+            ResultSet result = st.executeQuery(query);
+            
+            while (result.next()) {
+                nom = result.getString(1);
+                listeSalonAdmin.add(nom);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(SGBDUtils.class.getName()).log(Level.SEVERE, null, ex);
+        }        
+        return listeSalonAdmin;
+    }
+
+    /**
+     * Insérer autorise un user sur un salon
+     * @param nom Nom du user à ajouter au salon
+     * @param salon Nom du salon dans lequel on ajoute l'utilisateur
+     */
+    static void addUserSalon(String nom, String salon){
+        try {
+            /* Creation de la requete */
+            int id_user_autorise = SGBDUtils.getUser(nom).getID();
+            int idsalon = SGBDUtils.getSalon(salon).getID();
+            String reqAutoriseUserSalon = "INSERT INTO autorise (iddroit, idsalon, iduser) VALUES(0, "+idsalon+" , "+id_user_autorise+")";
+            /* Execution de la requete */
+            int res_insert_salon = st.executeUpdate(reqAutoriseUserSalon);
+        } catch (SQLException ex) {
+            Logger.getLogger(SGBDUtils.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
 }
