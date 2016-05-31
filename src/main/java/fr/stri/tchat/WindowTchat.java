@@ -34,6 +34,7 @@ public class WindowTchat extends javax.swing.JFrame {
     public WindowTchat(Salon salon) {
         initComponents();
         jLabelnomSalon.setText(salon.getNom());
+        jLabelUser.setText(SGBDUtils.getUserId(SGBDUtils.iduser_connecte).getLogin());
         this.salon = salon;
 
         Timer timer1 = new Timer(1000, new ActionListener() {
@@ -68,6 +69,7 @@ public class WindowTchat extends javax.swing.JFrame {
         jListConnectes.setModel(listeC);
     }
 
+    /* Rafraichir la fenetre contenant les messages */
     public void refreshMessage() {
         String message;
         int i;
@@ -76,7 +78,6 @@ public class WindowTchat extends javax.swing.JFrame {
 
         for (i = 0; i < listeMessage.size(); i++) {
             message = listeMessage.get(i);
-            //System.out.println("message");
             listeM.addElement(message);
         }
         jListConversation.setModel(listeM);
@@ -115,6 +116,9 @@ public class WindowTchat extends javax.swing.JFrame {
         jLabelnomSalon = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jButtonHorsLigne = new javax.swing.JButton();
+        jButtonMesSalons = new javax.swing.JButton();
+        jLabelUser = new javax.swing.JLabel();
+        jLabelStatut = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -127,7 +131,7 @@ public class WindowTchat extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(264, 264, 264)
                 .addComponent(jLabel3)
-                .addContainerGap(475, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -148,8 +152,8 @@ public class WindowTchat extends javax.swing.JFrame {
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 438, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 50, Short.MAX_VALUE))
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 396, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -160,7 +164,7 @@ public class WindowTchat extends javax.swing.JFrame {
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 22, Short.MAX_VALUE)
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -196,7 +200,7 @@ public class WindowTchat extends javax.swing.JFrame {
 
         jLabelnomSalon.setText("Nom du Salon");
 
-        jButton1.setText("boite de reception");
+        jButton1.setText("Boite de reception");
         jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jButton1MouseClicked(evt);
@@ -210,6 +214,18 @@ public class WindowTchat extends javax.swing.JFrame {
             }
         });
 
+        jButtonMesSalons.setText("Mes salons");
+        jButtonMesSalons.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonMesSalonsActionPerformed(evt);
+            }
+        });
+
+        jLabelUser.setText("User");
+        jLabelUser.setToolTipText("");
+
+        jLabelStatut.setText("Statut");
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -222,45 +238,49 @@ public class WindowTchat extends javax.swing.JFrame {
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(25, 25, 25)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton1)
-                            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jScrollPane1)
-                                .addComponent(jButtonMessagePrive, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(jButtonMessagePrive, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE))
+                                .addGap(24, 24, 24))))
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(48, 48, 48)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel4Layout.createSequentialGroup()
-                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(jPanel4Layout.createSequentialGroup()
-                                        .addComponent(jLabel5)
-                                        .addGap(328, 328, 328))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel4Layout.createSequentialGroup()
-                                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(jButtonEcrire)
-                                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 397, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addGap(31, 31, 31))
+                        .addGap(68, 68, 68)
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(48, 48, 48)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel5)
+                        .addGap(328, 328, 328))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel4Layout.createSequentialGroup()
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jButtonEcrire)
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGap(228, 228, 228)
-                                .addComponent(jLabelnomSalon))
+                                .addComponent(jButtonHorsLigne)
+                                .addGap(96, 96, 96)
+                                .addComponent(jButtonMesSalons))
+                            .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGap(201, 201, 201)
-                                .addComponent(jButtonHorsLigne)))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                .addComponent(jLabelnomSalon, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabelUser, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabelStatut, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(18, 18, 18)
+                .addContainerGap()
+                .addComponent(jLabelUser)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jLabelnomSalon))
+                    .addComponent(jLabelnomSalon)
+                    .addComponent(jLabelStatut))
                 .addGap(14, 14, 14)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(jPanel4Layout.createSequentialGroup()
@@ -272,20 +292,22 @@ public class WindowTchat extends javax.swing.JFrame {
                                 .addGap(1, 1, 1)
                                 .addComponent(jLabel5)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addGroup(jPanel4Layout.createSequentialGroup()
                                         .addComponent(jButtonMessagePrive)
-                                        .addGap(41, 41, 41)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(jButton1))
-                                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(1, 1, 1))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel4Layout.createSequentialGroup()
                         .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addComponent(jButtonEcrire)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton3)
-                    .addComponent(jButtonHorsLigne))
+                    .addComponent(jButtonHorsLigne)
+                    .addComponent(jButtonMesSalons))
                 .addContainerGap())
         );
 
@@ -294,7 +316,7 @@ public class WindowTchat extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -378,12 +400,20 @@ public class WindowTchat extends javax.swing.JFrame {
             SGBDUtils.deconnexion(SGBDUtils.iduser_connecte);
             SGBDUtils.setStatut("hors ligne");
             jButtonHorsLigne.setText("Me connecte");
+            jLabelStatut.setText("Hors ligne");
         } else {
             SGBDUtils.enligne();
             jButtonHorsLigne.setText("Passer hors ligne");
             SGBDUtils.setStatut("connecte");
+            jLabelStatut.setText("Connecte");
         }
     }//GEN-LAST:event_jButtonHorsLigneActionPerformed
+
+    /*  */ 
+    private void jButtonMesSalonsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonMesSalonsActionPerformed
+        WindowEspaceCollaborateur fenetreConnexion = new WindowEspaceCollaborateur(SGBDUtils.getUserId(SGBDUtils.iduser_connecte));
+        fenetreConnexion.setVisible(true);
+    }//GEN-LAST:event_jButtonMesSalonsActionPerformed
 
     /**
      * @param args the command line arguments
@@ -426,10 +456,13 @@ public class WindowTchat extends javax.swing.JFrame {
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButtonEcrire;
     private javax.swing.JButton jButtonHorsLigne;
+    private javax.swing.JButton jButtonMesSalons;
     private javax.swing.JButton jButtonMessagePrive;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabelStatut;
+    private javax.swing.JLabel jLabelUser;
     private javax.swing.JLabel jLabelnomSalon;
     private javax.swing.JList<String> jListConnectes;
     private javax.swing.JList<String> jListConversation;

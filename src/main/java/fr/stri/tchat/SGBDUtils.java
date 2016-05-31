@@ -186,7 +186,7 @@ class SGBDUtils {
             /* Envoi de la requête à la base de données */
             ResultSet result = st.executeQuery(query);
 
-            /* On parcourt le resultat de la requete pour construire la chaine de retour */
+            /* On parcourt le readdUserSalonsultat de la requete pour construire la chaine de retour */
             while (result.next()) {
                 droit = result.getString(1);
                 System.out.println("Droit"+droit);
@@ -499,18 +499,21 @@ class SGBDUtils {
      */
     public static List<String> recupMessageSalon(int id_salon) {
         List<String> listeMessage = new ArrayList<>();
+        String message="";
         /* Construction de la requête */
-        String query = "SELECT contenu FROM message, tchate WHERE tchate.idmessage = message.idmessage AND tchate.idsalon = " + id_salon;
-        int i = 0;
+        String query = "select distinct datereception, identifiant, contenu from users as u,tchate as t,message as m where t.idmessage=m.idmessage and t.iduser=u.iduser and t.idsalon="+id_salon;
         try {
             /* Envoi de la requête à la base de données */
             ResultSet result = st.executeQuery(query);
 
             /* On parcourt le resultat de la requete pour construire la chaine de retour */
             while (result.next()) {
-                System.out.println(result.getString(1));
-                listeMessage.add(result.getString(1));
-                i++;
+                message = result.getString(1).trim();
+                message += ", "+result.getString(2).trim();
+                message += " a dit : "+result.getString(3).trim();
+                System.out.println(message);
+                listeMessage.add(message);
+                
             }
         } catch (SQLException ex) {
             Logger.getLogger(SGBDUtils.class.getName()).log(Level.SEVERE, null, ex);
@@ -558,7 +561,7 @@ class SGBDUtils {
     }
 
     /**
-     * Insérer autorise un user sur un salon
+     * Insérer un user autorisé sur un salon
      * @param nom Nom du user à ajouter au salon
      * @param salon Nom du salon dans lequel on ajoute l'utilisateur
      */

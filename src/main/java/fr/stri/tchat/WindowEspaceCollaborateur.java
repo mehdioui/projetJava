@@ -181,13 +181,13 @@ public class WindowEspaceCollaborateur extends javax.swing.JFrame {
         WindowTchat fenetreTchat = new WindowTchat(salon);
         fenetreTchat.setVisible(true);
         this.setVisible(false);}
-        else if(iddroit== 1){//droit de lecture  donc on affiche la fenetre sans l'espace d'ecriture
-            windowtchat_restreinte fenetreTchat =new windowtchat_restreinte(salon);
+        else if(iddroit== 1){//droit de lecture donc on affiche la fenetre sans l'espace d'ecriture
+            Windowtcaht_restreinte fenetreTchat =new Windowtcaht_restreinte(salon);
             fenetreTchat.setVisible(true);
             this.setVisible(false);
         }
         else{
-            System.out.println("la gestion du droit s'est mal passé");
+            System.out.println("la gestion du droit s'est mal passée");
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
