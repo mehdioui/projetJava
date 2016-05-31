@@ -140,8 +140,7 @@ public class WindowAccueil extends javax.swing.JFrame {
             User test = SGBDUtils.getUser(login);
             /*String admin = "admin";*/
             droit = SGBDUtils.verifierDroits(login);
-            System.err.println("Droit accueil "+droit);
-            /*System.out.println("Droit : "+droit);*/
+            System.out.println("Droit accueil "+droit);
             /* Tester les droits pour determiner la fenetre à ouvrir */
             if (droit == 0){
                 WindowEspaceCollaborateur fenetreConnexion = new WindowEspaceCollaborateur(test);

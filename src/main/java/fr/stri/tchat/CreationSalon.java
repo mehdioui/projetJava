@@ -80,7 +80,9 @@ public class CreationSalon extends javax.swing.JFrame {
         nomSalon = jTextFieldNomSalon.getText(); /* récupération du nom saisi */
         /* Insertion du nouveau salon dans la base */
         SGBDUtils.insererSalon(nomSalon);
-        System.err.println("Salon créé "+nomSalon);
+        /* Ajout de l'admin au salon par défaut avec les droits de lecture et ecriture */
+        SGBDUtils.addUserSalon(SGBDUtils.getUserId(SGBDUtils.iduser_connecte).getLogin(), nomSalon, 0);
+        System.out.println("Salon créé "+nomSalon);
         AjoutSuppClient fenetreAjout= new AjoutSuppClient(nomSalon);
         fenetreAjout.setVisible(true);              
         this.setVisible(false);

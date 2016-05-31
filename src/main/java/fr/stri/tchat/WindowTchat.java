@@ -114,6 +114,7 @@ public class WindowTchat extends javax.swing.JFrame {
         jTextAreaMessage = new javax.swing.JTextArea();
         jLabelnomSalon = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+        jButtonHorsLigne = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -148,7 +149,7 @@ public class WindowTchat extends javax.swing.JFrame {
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 438, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 22, Short.MAX_VALUE))
+                .addGap(0, 50, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -185,7 +186,7 @@ public class WindowTchat extends javax.swing.JFrame {
         jButton3.setText("Quitter");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                jButtonQuitterActionPerformed(evt);
             }
         });
 
@@ -199,6 +200,13 @@ public class WindowTchat extends javax.swing.JFrame {
         jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jButton1MouseClicked(evt);
+            }
+        });
+
+        jButtonHorsLigne.setText("HorsLigne");
+        jButtonHorsLigne.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonHorsLigneActionPerformed(evt);
             }
         });
 
@@ -237,9 +245,14 @@ public class WindowTchat extends javax.swing.JFrame {
                                 .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addGap(31, 31, 31))
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(228, 228, 228)
-                        .addComponent(jLabelnomSalon)
-                        .addContainerGap(246, Short.MAX_VALUE))))
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addGap(228, 228, 228)
+                                .addComponent(jLabelnomSalon))
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addGap(201, 201, 201)
+                                .addComponent(jButtonHorsLigne)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -270,7 +283,9 @@ public class WindowTchat extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addComponent(jButtonEcrire)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
-                .addComponent(jButton3)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton3)
+                    .addComponent(jButtonHorsLigne))
                 .addContainerGap())
         );
 
@@ -292,10 +307,10 @@ public class WindowTchat extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        this.dispose();
+    private void jButtonQuitterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonQuitterActionPerformed
         /* Fermer la fenetre */
-    }//GEN-LAST:event_jButton3ActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_jButtonQuitterActionPerformed
 
     /**
      * Affichage dans la fenetre de la conversation et INSERT dans la base de
@@ -358,6 +373,18 @@ public class WindowTchat extends javax.swing.JFrame {
         boite.setVisible(true);
     }//GEN-LAST:event_jButton1MouseClicked
 
+    private void jButtonHorsLigneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonHorsLigneActionPerformed
+        if (SGBDUtils.statut == "connecte"){
+            SGBDUtils.deconnexion(SGBDUtils.iduser_connecte);
+            SGBDUtils.setStatut("hors ligne");
+            jButtonHorsLigne.setText("Me connecte");
+        } else {
+            SGBDUtils.enligne();
+            jButtonHorsLigne.setText("Passer hors ligne");
+            SGBDUtils.setStatut("connecte");
+        }
+    }//GEN-LAST:event_jButtonHorsLigneActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -398,6 +425,7 @@ public class WindowTchat extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButtonEcrire;
+    private javax.swing.JButton jButtonHorsLigne;
     private javax.swing.JButton jButtonMessagePrive;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

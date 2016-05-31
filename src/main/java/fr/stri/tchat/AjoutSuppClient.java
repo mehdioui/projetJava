@@ -25,9 +25,12 @@ public class AjoutSuppClient extends javax.swing.JFrame {
     public AjoutSuppClient(String nomSalon) {
         initComponents();
         jLabelSalon.setText(nomSalon);
-        salonAdministre(); /* Initialisation de listeSalonAdministre */
+        /* Initialisation de listeSalonAdministre */
+        salonAdministre();
         /* Initialisation de listeUserSalon */
-        /* Initialisation de listeAutreUser */
+        userAutorises();
+        /* Initialisation de listeNonAutorise */
+        userNonAutorises();
     }
     
     /**
@@ -35,10 +38,11 @@ public class AjoutSuppClient extends javax.swing.JFrame {
      */
     public AjoutSuppClient() {
         initComponents();
-        salonAdministre(); /* Initialisation de listeSalonAdministre */
+        /* Initialisation de listeSalonAdministre */
+        salonAdministre(); 
         /* Initialisation de listeUserSalon */
         userAutorises();
-        /* Initialisation de listeAutreUser */
+        /* Initialisation de listeNonAutorise */
         userNonAutorises();
     }  
 
@@ -72,23 +76,24 @@ public class AjoutSuppClient extends javax.swing.JFrame {
             nomUser = listeUserSalon.get(i);
             listeU.addElement(nomUser);
         }
-        jListEnlever.setModel(listeU);
+        jListPresents.setModel(listeU);
     }
 
     /**
      * Mise à jour de la liste des users non autorisés sur un salon
      */
     public void userNonAutorises(){
-        String nomUser;
+        String nomUser="";
         int i;
-        listeNonAutorise = SGBDUtils.getAllUsers(); /* Modifier getAllUsers() */    
+        listeNonAutorise = SGBDUtils.getUserNonPresents(SGBDUtils.getSalon(jLabelSalon.getText()).getID()); /* Modifier getAllUsers() */    
         DefaultListModel<String> listeI = new DefaultListModel();
         
         for (i = 0; i < listeNonAutorise.size(); i++){
             nomUser = listeNonAutorise.get(i);
+             System.out.println(nomUser);
             listeI.addElement(nomUser);
         }
-        jListAjouter.setModel(listeI);
+        jListNonPresents.setModel(listeI);
     }
     
     @SuppressWarnings("unchecked")
@@ -102,9 +107,9 @@ public class AjoutSuppClient extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jSeparator1 = new javax.swing.JSeparator();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jListEnlever = new javax.swing.JList<>();
+        jListPresents = new javax.swing.JList<>();
         jScrollPaneAjouter = new javax.swing.JScrollPane();
-        jListAjouter = new javax.swing.JList<>();
+        jListNonPresents = new javax.swing.JList<>();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabelSalon = new javax.swing.JLabel();
@@ -112,6 +117,8 @@ public class AjoutSuppClient extends javax.swing.JFrame {
         jButtonEnlever = new javax.swing.JButton();
         jButtonValider = new javax.swing.JButton();
         jButtonAnnuler = new javax.swing.JButton();
+        jRadioButtonLectEcrit = new javax.swing.JRadioButton();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -154,9 +161,9 @@ public class AjoutSuppClient extends javax.swing.JFrame {
         jSeparator1.setBackground(new java.awt.Color(85, 35, 243));
         jSeparator1.setForeground(new java.awt.Color(85, 35, 243));
 
-        jScrollPane2.setViewportView(jListEnlever);
+        jScrollPane2.setViewportView(jListPresents);
 
-        jScrollPaneAjouter.setViewportView(jListAjouter);
+        jScrollPaneAjouter.setViewportView(jListNonPresents);
 
         jLabel1.setText("Ajouter");
 
@@ -192,6 +199,10 @@ public class AjoutSuppClient extends javax.swing.JFrame {
             }
         });
 
+        jRadioButtonLectEcrit.setText("Lect & Ecrit");
+
+        jLabel3.setText("Les droits sont la Lecture par défaut, cochez 'Lect & Ecrit' pour ajouter le droit d'écrire ");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -204,7 +215,7 @@ public class AjoutSuppClient extends javax.swing.JFrame {
                 .addComponent(jLabel2)
                 .addGap(53, 53, 53))
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(136, 136, 136)
                         .addComponent(jButtonValider)
@@ -213,16 +224,24 @@ public class AjoutSuppClient extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jScrollPaneAjouter, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(jButtonAjouter)
+                                .addGap(117, 117, 117)
+                                .addComponent(jButtonEnlever))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(51, 51, 51)
+                                .addComponent(jRadioButtonLectEcrit)))
                         .addGap(18, 18, 18)
-                        .addComponent(jButtonAjouter)
-                        .addGap(40, 40, 40)
-                        .addComponent(jButtonEnlever)
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jLabelSalon, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(28, Short.MAX_VALUE))
+                        .addComponent(jLabelSalon, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -244,13 +263,17 @@ public class AjoutSuppClient extends javax.swing.JFrame {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jScrollPaneAjouter, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jRadioButtonLectEcrit)
+                        .addGap(81, 81, 81)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jButtonEnlever)
                             .addComponent(jButtonAjouter))
-                        .addGap(221, 221, 221))))
+                        .addGap(193, 193, 193)))
+                .addComponent(jLabel3)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -260,9 +283,9 @@ public class AjoutSuppClient extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(29, 29, 29))
+                .addGap(51, 51, 51))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -282,12 +305,16 @@ public class AjoutSuppClient extends javax.swing.JFrame {
      * @param evt 
      */
     private void jButtonAjouterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAjouterActionPerformed
+        int droit = 1;
         /* Ajout dans la base de données */
-        SGBDUtils.addUserSalon(jListAjouter.getSelectedValue(), jLabelSalon.getText());
+        if (jRadioButtonLectEcrit.isSelected()){
+            droit = 0;
+        }
+        SGBDUtils.addUserSalon(jListNonPresents.getSelectedValue(), jLabelSalon.getText(), droit);
         /* Ajout à la liste des présents sur le salon */
-        this.listeUserSalon.add(jListAjouter.getSelectedValue());
+        this.listeUserSalon.add(jListNonPresents.getSelectedValue());
         userAutorises();
-        /* Enlever des personnes à ajouter */
+        userNonAutorises();        
     }//GEN-LAST:event_jButtonAjouterActionPerformed
 
     /**
@@ -295,13 +322,18 @@ public class AjoutSuppClient extends javax.swing.JFrame {
      * @param evt 
      */
     private void jButtonEnleverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEnleverActionPerformed
-        
+        /* Mise à jour de la base de données */
+        SGBDUtils.delUserSalon(jListPresents.getSelectedValue(), jLabelSalon.getText());
+        /* Supprimer le user de la liste des users d'un salon */
+        this.listeUserSalon.remove(jListPresents.getSelectedValue());
+        userNonAutorises();
+        userAutorises();
     }//GEN-LAST:event_jButtonEnleverActionPerformed
 
     /* Renvoyer vers la fenetre de creation */
     private void jButtonValiderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonValiderActionPerformed
-        CreationSalon fenetreCreation = new CreationSalon();
-        fenetreCreation.setVisible(true);
+        EspaceAdmin fenetreAdmin = new EspaceAdmin(SGBDUtils.getUserId(SGBDUtils.iduser_connecte));
+        fenetreAdmin.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_jButtonValiderActionPerformed
 
@@ -318,6 +350,8 @@ public class AjoutSuppClient extends javax.swing.JFrame {
     private void jToggleButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonOKActionPerformed
         String nomSalon = jListSalon.getSelectedValue();
         jLabelSalon.setText(nomSalon);
+        userAutorises();
+        userNonAutorises();
     }//GEN-LAST:event_jToggleButtonOKActionPerformed
 
     /**
@@ -334,12 +368,14 @@ public class AjoutSuppClient extends javax.swing.JFrame {
     private javax.swing.JButton jButtonValider;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabelSalon;
-    private javax.swing.JList<String> jListAjouter;
-    private javax.swing.JList<String> jListEnlever;
+    private javax.swing.JList<String> jListNonPresents;
+    private javax.swing.JList<String> jListPresents;
     private javax.swing.JList<String> jListSalon;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JRadioButton jRadioButtonLectEcrit;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPaneAjouter;

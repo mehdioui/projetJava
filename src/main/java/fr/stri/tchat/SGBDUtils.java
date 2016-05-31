@@ -5,6 +5,7 @@
  */
 package fr.stri.tchat;
 
+import com.sun.org.apache.xerces.internal.impl.dv.xs.StringDV;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -23,12 +24,25 @@ class SGBDUtils {
 
     static int iduser_connecte;
     static int droit;
+    static String statut;
     static String myDriver = "org.postgresql.Driver";
     static String myUrl = "jdbc:postgresql://localhost/projetjava";
     static Connection conn;
     static Statement st;
     static String mdp_connexion = "123456";
 
+    static void setStatut(String statut){
+        SGBDUtils.statut = statut;
+    }
+    
+    static String getStatut(){
+        return SGBDUtils.statut;
+    }
+    
+    static void alterStatut(String s){
+        setStatut(s);
+    }
+    
     /**
      * Vérifier l'authentification d'un utilsateur
      * @param login
@@ -59,7 +73,8 @@ class SGBDUtils {
                 SGBDUtils.iduser_connecte = result.getInt(1);
                 System.out.println("Id user = " + SGBDUtils.iduser_connecte);
             }
-
+            
+            statut = "connecte";
             String req_connexion = "update public.users set statut = 'connecte' where iduser = "+iduser_connecte;
             /* Execution de la requete */
             int res_update = st.executeUpdate(req_connexion);
@@ -265,14 +280,41 @@ class SGBDUtils {
         return tmp;
     }
 
+    
     /**
-     * Obtenir la liste de tous les users de la base de données
-     * @return 
+     * Obtenir les users qui ne sont pas sur le salon
      */
-    static List<String> getAllUsers(){
+    static List<String> getUserNonPresents(int id_salon){
         List<String> listeUser = new ArrayList<>();
         
-        String query = "select identifiant from public.users";
+        String query = "select identifiant from users where identifiant not in (select identifiant from users as u, autorise as a where u.iduser = a.iduser and a.idsalon = "+id_salon+")";
+       
+        int i = 0;
+        try {
+            /* Envoi de la requête à la base de données */
+            ResultSet result = st.executeQuery(query);
+
+            /* On parcourt le resultat de la requete pour construire la chaine de retour */
+            while (result.next()) {
+                System.out.println(result.getString(1));
+                listeUser.add(result.getString(1));
+                i++;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(SGBDUtils.class.getName()).log(Level.SEVERE, null, ex);
+        }   
+        
+        return listeUser;         
+    }
+    
+    /**
+     * Obtenir la liste de tous les users autorises sur le salon
+     * @return 
+     */
+    static List<String> getUsersSalonPresents(int id_salon){
+        List<String> listeUser = new ArrayList<>();
+        
+        String query = "select identifiant from users as u, autorise as a where u.iduser = a.iduser and a.idsalon = "+id_salon;
        
         int i = 0;
         try {
@@ -520,12 +562,12 @@ class SGBDUtils {
      * @param nom Nom du user à ajouter au salon
      * @param salon Nom du salon dans lequel on ajoute l'utilisateur
      */
-    static void addUserSalon(String nom, String salon){
+    static void addUserSalon(String nom, String salon, int droit){
         try {
             /* Creation de la requete */
             int id_user_autorise = SGBDUtils.getUser(nom).getID();
             int idsalon = SGBDUtils.getSalon(salon).getID();
-            String reqAutoriseUserSalon = "INSERT INTO autorise (iddroit, idsalon, iduser) VALUES(0, "+idsalon+" , "+id_user_autorise+")";
+            String reqAutoriseUserSalon = "INSERT INTO autorise (iddroit, idsalon, iduser) VALUES("+droit+", "+idsalon+" , "+id_user_autorise+")";
             /* Execution de la requete */
             int res_insert_salon = st.executeUpdate(reqAutoriseUserSalon);
         } catch (SQLException ex) {
@@ -534,7 +576,7 @@ class SGBDUtils {
     }
     
     /**
-     * Mettre à jour la base de données
+     * Mettre à jour la base de données => Statut passe à hors ligne
      * @param id_user 
      */
     static void deconnexion(int id_user){
@@ -546,9 +588,33 @@ class SGBDUtils {
             Logger.getLogger(SGBDUtils.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+   
+    /**
+     * Passer le statut du user à connecté
+     */
+    static void enligne(){
+        String query = "update public.users set statut = 'connecte' where iduser = "+SGBDUtils.iduser_connecte;
+        /* Execution de la requete */
+        try{
+            int res_update = st.executeUpdate(query);
+        } catch (SQLException ex) {
+            Logger.getLogger(SGBDUtils.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
+        
+    }
     
     static void delUserSalon(String nom, String salon){
-        
+        try {
+            /* Creation de la requete */
+            int id_user_del = SGBDUtils.getUser(nom).getID();
+            int id_salon_del = SGBDUtils.getSalon(salon).getID();
+            String reqDelUserSalon = "delete from public.autorise where iduser = "+id_user_del+"and idsalon = "+id_salon_del;
+            /* Execution de la requete */
+            int res_insert_salon = st.executeUpdate(reqDelUserSalon);
+        } catch (SQLException ex) {
+            Logger.getLogger(SGBDUtils.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
 }
