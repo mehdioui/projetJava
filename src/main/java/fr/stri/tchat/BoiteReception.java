@@ -14,7 +14,7 @@ import javax.swing.DefaultListModel;
 
 /**
  *
- * @author thomas
+ * @author Nadjim
  */
 public class BoiteReception extends javax.swing.JFrame {
 
@@ -24,20 +24,29 @@ public class BoiteReception extends javax.swing.JFrame {
      */
     public BoiteReception() throws SQLException, InterruptedException {
         initComponents();
-        this.refreshBoite();
-        
-        
+        this.refreshBoite();       
     }
+    
+    /**
+     * Rafraichir la boite de reception d'un utilisateur
+     * @throws SQLException
+     * @throws InterruptedException 
+     */
     public void refreshBoite() throws SQLException, InterruptedException{
         
         //connexion a la base de donnée
         Statement st=SGBDUtils.conn.createStatement();
         
         DefaultListModel<String> listeS = new DefaultListModel();
+        
+        /* Construction de la requete */
         String query="select contenu,datereception,identifiant from users,message,envoie";
         query+=" where users.iduser=envoie.iduser2 and message.idmessage=envoie.idmessage and envoie.iduser="+SGBDUtils.iduser_connecte;
+        
+        /* Envoi de la requete à la base de donnees */
         ResultSet res=st.executeQuery(query);
               String val ="";
+        
         while(res.next()){
             
             val=res.getString(3);
@@ -116,8 +125,11 @@ public class BoiteReception extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Masquer la fenetre lorsqu'on clique sur le bouton
+     * @param evt 
+     */
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
-        // TODO add your handling code here:
         this.setVisible(false);
     }//GEN-LAST:event_jButton1MouseClicked
 

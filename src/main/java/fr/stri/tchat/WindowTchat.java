@@ -18,7 +18,7 @@ import javax.swing.Timer;
 
 /**
  *
- * @author thomas
+ * @author Stephanie
  */
 public class WindowTchat extends javax.swing.JFrame {
 
@@ -36,7 +36,8 @@ public class WindowTchat extends javax.swing.JFrame {
         jLabelnomSalon.setText(salon.getNom());
         jLabelUser.setText(SGBDUtils.getUserId(SGBDUtils.iduser_connecte).getLogin());
         this.salon = salon;
-
+        
+        /* Timer sur les messages */
         Timer timer1 = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -44,6 +45,8 @@ public class WindowTchat extends javax.swing.JFrame {
             }
         });
         timer1.start();
+        
+        /* Timer sur les personnes connectées au salon */
         Timer timer2 = new Timer(10000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -51,10 +54,11 @@ public class WindowTchat extends javax.swing.JFrame {
             }
         });
         timer2.start();
-        //refreshMessage();
-        //refreshConnecte();
     }
 
+    /**
+     * Rafraichir la liste des personnes connectées au salon
+     */
     public void refreshConnecte() {
         String nomuser;
         int i;
@@ -69,7 +73,9 @@ public class WindowTchat extends javax.swing.JFrame {
         jListConnectes.setModel(listeC);
     }
 
-    /* Rafraichir la fenetre contenant les messages */
+    /**
+     * Rafraichir la fenetre contenant les messages
+     */
     public void refreshMessage() {
         String message;
         int i;
@@ -83,6 +89,10 @@ public class WindowTchat extends javax.swing.JFrame {
         jListConversation.setModel(listeM);
     }
 
+    /**
+     * Obtenir le nom du salon
+     * @return Le nom du salon
+     */
     public String getNomSalon() {
         return jLabelnomSalon.getText();
     }
@@ -329,15 +339,18 @@ public class WindowTchat extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Fermer la fenetre de tchat
+     * @param evt 
+     */
     private void jButtonQuitterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonQuitterActionPerformed
         /* Fermer la fenetre */
         this.dispose();
     }//GEN-LAST:event_jButtonQuitterActionPerformed
 
     /**
-     * Affichage dans la fenetre de la conversation et INSERT dans la base de
-     * données
-     *
+     * Affichage du message saisi dans la fenetre de la conversation 
+     * et INSERT dans la base de données
      * @param evt
      */
     private void jButtonEcrireActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEcrireActionPerformed
@@ -376,14 +389,21 @@ public class WindowTchat extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButtonEcrireActionPerformed
 
+    /**
+     * Permet d'envoyer un message privé à un autre utilisateur
+     * @param evt 
+     */
     private void jButtonMessagePriveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonMessagePriveActionPerformed
         SendprivateMessage fenetreMessagePrive = new SendprivateMessage();
         fenetreMessagePrive.setVisible(true);
     }//GEN-LAST:event_jButtonMessagePriveActionPerformed
-
+    
+    /**
+     * Permet à l'utilisateur connecté d'accéder à sa boite de reception 
+     * @param evt 
+     */
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
-        // TODO add your handling code here:
-        System.out.println("tu viens de cliquer sur le bouton boite de reception");
+        System.out.println("Vous venez de cliquer sur le bouton Boite de reception");
         BoiteReception boite = null;
         try {
             boite = new BoiteReception();
@@ -395,6 +415,11 @@ public class WindowTchat extends javax.swing.JFrame {
         boite.setVisible(true);
     }//GEN-LAST:event_jButton1MouseClicked
 
+    /**
+     * Permet à un utilisateur de changer son statut :
+     * Connecte => Hors ligne et Hors ligne => Connecte
+     * @param evt 
+     */
     private void jButtonHorsLigneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonHorsLigneActionPerformed
         if (SGBDUtils.statut == "connecte"){
             SGBDUtils.deconnexion(SGBDUtils.iduser_connecte);
@@ -409,7 +434,10 @@ public class WindowTchat extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButtonHorsLigneActionPerformed
 
-    /*  */ 
+    /**
+     * Permet à un utilisateur d'ouvrir un autre salon
+     * @param evt 
+     */ 
     private void jButtonMesSalonsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonMesSalonsActionPerformed
         WindowEspaceCollaborateur fenetreConnexion = new WindowEspaceCollaborateur(SGBDUtils.getUserId(SGBDUtils.iduser_connecte));
         fenetreConnexion.setVisible(true);

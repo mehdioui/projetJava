@@ -7,7 +7,7 @@ package fr.stri.tchat;
 
 /**
  *
- * @author aspy
+ * @author Frederic
  */
 public class CreationSalon extends javax.swing.JFrame {
 
@@ -75,6 +75,11 @@ public class CreationSalon extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Valider le nom du salon et le créer
+     * Bascule vers AjoutSuppClient
+     * @param evt 
+     */
     private void jButtonValiderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonValiderActionPerformed
         String nomSalon = "";
         nomSalon = jTextFieldNomSalon.getText(); /* récupération du nom saisi */

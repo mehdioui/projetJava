@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author thomas
+ * @author Stephanie & Nadjim
  */
 class SGBDUtils {
 
@@ -283,6 +283,8 @@ class SGBDUtils {
     
     /**
      * Obtenir les users qui ne sont pas sur le salon
+     * @param id_salon ID du salon pour lequel on recupère les users qui ne sont pas présents
+     * @return Liste des users qui ne sont pas sur le salon
      */
     static List<String> getUserNonPresents(int id_salon){
         List<String> listeUser = new ArrayList<>();
@@ -309,7 +311,8 @@ class SGBDUtils {
     
     /**
      * Obtenir la liste de tous les users autorises sur le salon
-     * @return 
+     * @param id_salon ID du salon pour lequel on récupère les users présents
+     * @return Liste des users présents sur le salon
      */
     static List<String> getUsersSalonPresents(int id_salon){
         List<String> listeUser = new ArrayList<>();
@@ -337,7 +340,7 @@ class SGBDUtils {
     /**
      * Obtenir un salon à partir de son nom
      * @param nomSalon
-     * @return 
+     * @return Salon
      */
     static Salon getSalon(String nomSalon) {
         Salon tmpS = new Salon(nomSalon);
@@ -607,6 +610,11 @@ class SGBDUtils {
         
     }
     
+    /**
+     * Supprimer un user d'un salon
+     * @param nom
+     * @param salon 
+     */
     static void delUserSalon(String nom, String salon){
         try {
             /* Creation de la requete */

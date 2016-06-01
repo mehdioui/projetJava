@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author stef
+ * @author Stephanie
  */
 public class SendprivateMessage extends javax.swing.JFrame {
 

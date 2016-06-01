@@ -13,7 +13,10 @@ import java.util.ArrayList;
  */
 public class Salon {
     
-    /* ***** ATTRIBUTS ***** */
+    /**
+    * ATTRIBUTS 
+    */
+    
     /* ID du salon */
     int ID;
     /* Nom du salon */ 
@@ -23,12 +26,16 @@ public class Salon {
     /* Liste users */
     ArrayList <User> liste_users = new ArrayList<User>();
 
-    /* ***** CONSTRUCTEUR ***** */ 
+    /**
+    * CONSTRUCTEUR 
+    */ 
     public Salon(String nomSalon) {
         this.nom = nomSalon;
     }
     
-    /* ***** GETTER / SETTER ***** */
+    /**
+    * GETTER / SETTER 
+    */
     public int getID(){
         return ID;
     }

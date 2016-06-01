@@ -10,7 +10,7 @@ import javax.swing.DefaultListModel;
 
 /**
  *
- * @author aspy
+ * @author Stephanie et Frederic
  */
 public class AjoutSuppClient extends javax.swing.JFrame {
 
@@ -330,7 +330,10 @@ public class AjoutSuppClient extends javax.swing.JFrame {
         userAutorises();
     }//GEN-LAST:event_jButtonEnleverActionPerformed
 
-    /* Renvoyer vers la fenetre de creation */
+    /**
+     * Renvoyer vers la fenetre de creation
+     * @param evt 
+     */
     private void jButtonValiderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonValiderActionPerformed
         EspaceAdmin fenetreAdmin = new EspaceAdmin(SGBDUtils.getUserId(SGBDUtils.iduser_connecte));
         fenetreAdmin.setVisible(true);
@@ -347,6 +350,10 @@ public class AjoutSuppClient extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_jButtonAnnulerActionPerformed
 
+    /**
+     * Choisir le salon sur lequel on souhaite ajouter ou supprimer des clients
+     * @param evt 
+     */
     private void jToggleButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonOKActionPerformed
         String nomSalon = jListSalon.getSelectedValue();
         jLabelSalon.setText(nomSalon);

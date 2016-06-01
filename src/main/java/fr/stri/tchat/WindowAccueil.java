@@ -7,7 +7,7 @@ package fr.stri.tchat;
 
 /**
  *
- * @author thomas
+ * @author Nadjim
  */
 public class WindowAccueil extends javax.swing.JFrame {
 
@@ -124,6 +124,11 @@ public class WindowAccueil extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Permet de se connecter
+     * Verification des donnees dans la base de donnees
+     * @param evt 
+     */
     private void jbuttonconnexionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbuttonconnexionActionPerformed
         String login;
         String passwd;
@@ -137,9 +142,8 @@ public class WindowAccueil extends javax.swing.JFrame {
 
         if (verifOk) {
             User test = SGBDUtils.getUser(login);
-            /*String admin = "admin";*/
+            /* String admin = "admin"; */
             droit = SGBDUtils.verifierDroits(login);
-            System.out.println("Droit accueil "+droit);
             /* Tester les droits pour determiner la fenetre à ouvrir */
             if (droit == 0){
                 WindowEspaceCollaborateur fenetreConnexion = new WindowEspaceCollaborateur(test);
@@ -150,10 +154,7 @@ public class WindowAccueil extends javax.swing.JFrame {
                 fenetreAdmin.setVisible(true);
                 this.setVisible(false);
             }
-            /* Le statut du user passe à connecté */
-            /* String query = "UPDATE TABLE users SET statut = 'connecte' WHERE iduser = test.getID()";
-               int update = executeUpdate(query);
-            */      
+      
         }
 
     }//GEN-LAST:event_jbuttonconnexionActionPerformed

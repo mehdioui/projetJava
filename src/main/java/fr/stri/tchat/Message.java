@@ -7,11 +7,13 @@ package fr.stri.tchat;
 
 /**
  *
- * @author thomas
+ * @author Stephanie
  */
 public class Message {
 
-    /* ATTRIBUTS */
+    /**
+     * ATTRIBUTS
+     */
     /* ID du message */   
     int ID;
     /* Expediteur du message */
@@ -22,14 +24,24 @@ public class Message {
     String contenu;
 
     
-    /* ***** CONSTRUCTEUR ***** */
+    /**
+     * CONSTRUCTEUR
+     * @param exp
+     * @param recep
+     * @param contenu 
+     */
     public Message(User exp, User recep, String contenu) {
         this.expediteur = exp;
         this.recepteur = recep;
         this.contenu = contenu;
     }
     
-    /* ***** GETTER / SETTER ***** */
+    /**
+     * GETTER / SETTER 
+     * @return 
+     */
+    
+    /* Sur l'ID */
     public int getID() {
         return ID;
     }
@@ -38,6 +50,7 @@ public class Message {
         this.ID = ID;
     }
 
+    /* Sur l'expediteur */
     public User getExpediteur() {
         return expediteur;
     }
@@ -46,6 +59,7 @@ public class Message {
         this.expediteur = expediteur;
     }
 
+    /* Sur le recepteur */
     public User getRecepteur() {
         return recepteur;
     }
@@ -54,6 +68,7 @@ public class Message {
         this.recepteur = recepteur;
     }
 
+    /* Sur le contenu */
     public String getContenu() {
         return contenu;
     }
@@ -61,7 +76,5 @@ public class Message {
     public void setContenu(String contenu) {
         this.contenu = contenu;
     }
-    
-    
-    
+        
 }

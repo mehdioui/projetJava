@@ -7,7 +7,7 @@ package fr.stri.tchat;
 
 /**
  *
- * @author aspy
+ * @author Stephanie et Frederic
  */
 public class EspaceAdmin extends javax.swing.JFrame {
 
@@ -125,24 +125,43 @@ public class EspaceAdmin extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Permet de créer un salon
+     * Bascule vers CreationSalon
+     * @param evt 
+     */
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         CreationSalon fenetreAjoutSalon = new CreationSalon();
         fenetreAjoutSalon.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    /**
+     * Permet d'ajouter ou supprimer un client d'un salon
+     * Bascule vers AjoutSuppClient
+     * @param evt 
+     */
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         AjoutSuppClient fenetreGestionClient = new AjoutSuppClient();
         fenetreGestionClient.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    /**
+     * Permet de rejoindre un salon dejà existant
+     * Bascule vers WindowEspaceCollaborateur
+     * @param evt 
+     */
     private void jButtonRejoindreSalonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRejoindreSalonActionPerformed
         WindowEspaceCollaborateur fenetreCollaborateur = new WindowEspaceCollaborateur(SGBDUtils.getUserId(SGBDUtils.iduser_connecte));
         this.setVisible(false);
         fenetreCollaborateur.setVisible(true);
     }//GEN-LAST:event_jButtonRejoindreSalonActionPerformed
 
+    /**
+     * Permet à un user de se deconnecter
+     * @param evt 
+     */
     private void jButtonDeconnexionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeconnexionActionPerformed
         SGBDUtils.deconnexion(SGBDUtils.iduser_connecte);
         this.dispose();

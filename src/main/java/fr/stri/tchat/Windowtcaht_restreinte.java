@@ -31,6 +31,8 @@ public class Windowtcaht_restreinte extends javax.swing.JFrame {
         this.salon=salon;
         jLabelnomSalon.setText(salon.getNom());
         jLabelUser.setText(SGBDUtils.getUserId(SGBDUtils.iduser_connecte).getLogin());
+        
+        /* Rafraichir la liste des messages du tchat */
         Timer timer1 = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -38,17 +40,15 @@ public class Windowtcaht_restreinte extends javax.swing.JFrame {
             }
         });
         timer1.start();
+        
+        /* Rafraichir la liste des personnes connectées au salon */
         Timer timer2 = new Timer(10000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 refreshConnecte();
             }
         });
-        timer2.start();
-        //refreshMessage();
-        //refreshConnecte();
-
-        
+        timer2.start(); 
     }
 
    
@@ -162,13 +162,14 @@ public class Windowtcaht_restreinte extends javax.swing.JFrame {
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                                 .addGap(28, 28, 28))
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(14, 14, 14)
-                                .addComponent(jButton1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(28, 28, 28)
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(14, 14, 14)
+                                        .addComponent(jButton1))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(28, 28, 28)
+                                        .addComponent(jLabel2)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 345, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -189,10 +190,11 @@ public class Windowtcaht_restreinte extends javax.swing.JFrame {
                 .addGap(6, 6, 6)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelnomSalon)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabelUser))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabelUser, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabelnomSalon)
+                        .addComponent(jLabel2)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(300, 300, 300)
@@ -220,10 +222,18 @@ public class Windowtcaht_restreinte extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    /**
+     * Permet de quitter la fenetre du salon
+     * @param evt 
+     */
     private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
         this.dispose();
     }//GEN-LAST:event_jButton3MouseClicked
 
+    /**
+     * Envoyer un message privé à un autre utilisateur
+     * @param evt 
+     */
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
         SendprivateMessage fenetreMessagePrive = new SendprivateMessage();
         fenetreMessagePrive.setVisible(true);      // TODO add your handling code here:
@@ -233,6 +243,10 @@ public class Windowtcaht_restreinte extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    /**
+     * Permet à un utilisateur d'accéder à sa boite de réception
+     * @param evt 
+     */
     private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
          System.out.println("tu viens de cliquer sur le bouton boite de reception");
         BoiteReception boite = null;
@@ -243,23 +257,34 @@ public class Windowtcaht_restreinte extends javax.swing.JFrame {
         } catch (InterruptedException ex) {
             Logger.getLogger(WindowTchat.class.getName()).log(Level.SEVERE, null, ex);
         }
-        boite.setVisible(true);        // TODO add your handling code here:
+        boite.setVisible(true);
     }//GEN-LAST:event_jButton2MouseClicked
 
+    /**
+     * Permet de quitter la fenetre
+     * @param evt 
+     */
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        this.dispose();        // TODO add your handling code here:
+        this.dispose(); 
     }//GEN-LAST:event_jButton3ActionPerformed
 
+    /**
+     * Permet d'accéder à un autre salon
+     * @param evt 
+     */
     private void jButton4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton4MouseClicked
-        // TODO add your handling code here:jfffffffffffffffffff
         WindowEspaceCollaborateur fenetreConnexion = new WindowEspaceCollaborateur(SGBDUtils.getUserId(SGBDUtils.iduser_connecte));
-                fenetreConnexion.setVisible(true);
+        fenetreConnexion.setVisible(true);
     }//GEN-LAST:event_jButton4MouseClicked
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton4ActionPerformed
 
+    /**
+     * Permet à un utilisateur de changer son statut
+     * @param evt 
+     */
     private void jButtonHorsLigneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonHorsLigneActionPerformed
         if (SGBDUtils.statut == "connecte"){
             SGBDUtils.deconnexion(SGBDUtils.iduser_connecte);

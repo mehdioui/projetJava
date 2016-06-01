@@ -17,7 +17,7 @@ import javax.swing.DefaultListModel;
 
 /**
  *
- * @author thomas
+ * @author Nadjim et Stephanie
  */
 public class WindowEspaceCollaborateur extends javax.swing.JFrame {
 
@@ -34,6 +34,9 @@ public class WindowEspaceCollaborateur extends javax.swing.JFrame {
         refreshSalon();
     }
     
+    /**
+     * Rafraichir la liste des salons disponibles pour un utilisateur
+     */
     private void refreshSalon(){
         listeSalon = SGBDUtils.recupSalon(this.utilisateur.getID());
         String nomSalon = "";
@@ -153,13 +156,21 @@ public class WindowEspaceCollaborateur extends javax.swing.JFrame {
 
     /* Remplir la liste des salons disponibles pour l'utilisateur connecté */
     
-    
+    /**
+     * Permet de se deconnecter
+     * @param evt 
+     */
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         SGBDUtils.deconnexion(SGBDUtils.iduser_connecte);
         this.dispose();
         /* Fermer la fenêtre */
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    /**
+     * Permet d'ouvrir le salon selectionne
+     * Bascule vers WindowTchat ou Windowtcaht_restreinte suivant les droits de l'utilisateur
+     * @param evt 
+     */
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         int iddroit=0;
         //recuperation du droit sur ce salon
@@ -177,17 +188,18 @@ public class WindowEspaceCollaborateur extends javax.swing.JFrame {
             Logger.getLogger(WindowEspaceCollaborateur.class.getName()).log(Level.SEVERE, null, ex);
         }
         Salon salon = SGBDUtils.getSalon(nomSalon);
+        
         if(iddroit == 0){//droit de lecture et d'ecriture
-        WindowTchat fenetreTchat = new WindowTchat(salon);
-        fenetreTchat.setVisible(true);
-        this.setVisible(false);}
+            WindowTchat fenetreTchat = new WindowTchat(salon);
+            fenetreTchat.setVisible(true);
+            this.setVisible(false);}
         else if(iddroit== 1){//droit de lecture donc on affiche la fenetre sans l'espace d'ecriture
             Windowtcaht_restreinte fenetreTchat =new Windowtcaht_restreinte(salon);
             fenetreTchat.setVisible(true);
             this.setVisible(false);
         }
         else{
-            System.out.println("la gestion du droit s'est mal passée");
+            System.out.println("La gestion du droit s'est mal passée");
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
